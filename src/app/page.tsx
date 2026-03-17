@@ -57,13 +57,9 @@ function HomeContent() {
                   <Link href={`/?categoria=${cat.id}`}>
                     <Card 
                       hoverable 
-                      className="text-center h-full border-gray-200 hover:border-locmaisTeal transition-all shadow-sm hover:shadow-md"
-                      bodyStyle={{ padding: '24px 16px' }}
+                      className="text-center h-full border-gray-200 hover:border-locmaisTeal transition-all shadow-sm hover:shadow-md flex items-center justify-center p-4 min-h-[100px]"
                     >
-                      <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-4 ${cat.icon}`}>
-                        <span className="text-2xl font-bold">{cat.name.charAt(0)}</span>
-                      </div>
-                      <Title level={5} className="!mb-1 text-gray-800">{cat.name}</Title>
+                      <Title level={5} className="!mb-0 text-gray-800 whitespace-nowrap">{cat.name}</Title>
                     </Card>
                   </Link>
                 </Col>

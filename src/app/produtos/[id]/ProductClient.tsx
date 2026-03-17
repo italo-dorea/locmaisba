@@ -78,10 +78,15 @@ export function ProductClient({ product }: { product: Product }) {
 
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <div className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded text-center hover:bg-gray-50 cursor-pointer transition-colors">
+              <a 
+                href="/manuais/portfolio-equipamentos-locmais.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded text-center hover:bg-gray-50 cursor-pointer transition-colors block"
+              >
                 <FilePdfOutlined className="text-2xl text-red-500 mb-2" />
-                <Text className="font-semibold text-gray-700">Baixar Manual</Text>
-              </div>
+                <Text className="font-semibold text-gray-700">Portfólio de Equipamentos</Text>
+              </a>
             </Col>
             <Col span={12}>
               <div className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded text-center hover:bg-gray-50 cursor-pointer transition-colors">
