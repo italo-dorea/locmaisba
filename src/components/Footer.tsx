@@ -19,7 +19,8 @@ export const Footer = () => {
               <Image src="/images/logo.png" alt="Locmais Logo" width={160} height={50} className="select-none" />
             </div>
             <Text className="text-gray-300 block mb-4">
-              Qualidade e eficiência no aluguel de máquinas. Tudo que sua obra precisa com atendimento rápido e seguro.
+              A LOCMAIS é uma empresa fundada em 16/07/2014, criada para atender clientes públicos e privados em serviços de construção e locação de equipamentos.<br/><br/>
+              Locação de equipamentos de pequeno e grande porte, tudo para sua obra. Reduza os custos e aumente a produtividade.
             </Text>
             <Space size="large" className="text-2xl mt-2">
               <Link href="#" className="text-white hover:text-locmaisYellow transition-colors"><WhatsAppOutlined /></Link>
@@ -34,7 +35,7 @@ export const Footer = () => {
               <Link href="/sobre" className="text-gray-200 hover:text-white transition-colors block">Sobre Nós</Link>
               <Link href="/servicos" className="text-gray-200 hover:text-white transition-colors block">Nossos Serviços</Link>
               <Link href="/faq" className="text-gray-200 hover:text-white transition-colors block">Dúvidas Frequentes</Link>
-              <Link href="/contato" className="text-gray-200 hover:text-white transition-colors block">Trabalhe Conosco</Link>
+              <Link href="/contato?assunto=trabalhe-conosco" className="text-gray-200 hover:text-white transition-colors block">Trabalhe Conosco</Link>
             </Space>
           </Col>
 
@@ -51,22 +52,33 @@ export const Footer = () => {
 
           {/* Contact Details */}
           <Col xs={24} md={6}>
-            <Title level={4} className="!text-locmaisYellow !mb-6">Fale Conosco</Title>
+            <Title level={4} className="!text-locmaisYellow !mb-6">Onde Estamos</Title>
             <Space direction="vertical" size="large" className="w-full">
               <div className="flex items-start">
                 <EnvironmentOutlined className="text-xl mr-3 text-locmaisYellow mt-1" />
                 <Text className="text-gray-200 block">
-                  Av. das Indústrias, 1000 - Galpão 5<br />
-                  Distrito Industrial, Salvador - BA
+                  <strong className="text-white">Sede (Bahia)</strong><br />
+                  Av. Ayrton Senna, n° 831, SL 01<br />
+                  Petrópolis, Dias d'Ávila/BA<br />
+                  CEP: 42.850-000
                 </Text>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-start">
+                <EnvironmentOutlined className="text-xl mr-3 text-locmaisYellow mt-1" />
+                <Text className="text-gray-200 block">
+                  <strong className="text-white">Filial (Paraíba)</strong><br />
+                  Agostinho C. J. Justo, n° 51<br />
+                  Quadra Lote 42, Patos/PB<br />
+                  CEP: 58.706-580
+                </Text>
+              </div>
+              <div className="flex items-center mt-2">
                 <PhoneOutlined className="text-xl mr-3 text-locmaisYellow" />
-                <Text className="text-gray-200">(71) 3333-4444</Text>
+                <Text className="text-gray-200">(71) 3625-6693</Text>
               </div>
               <div className="flex items-center">
                 <WhatsAppOutlined className="text-xl mr-3 text-locmaisYellow" />
-                <Text className="text-gray-200">(71) 99999-8888</Text>
+                <Text className="text-gray-200">(71) 99945-4369</Text>
               </div>
             </Space>
           </Col>
