@@ -2,8 +2,13 @@
 
 import React from 'react';
 import { WhatsAppOutlined } from '@ant-design/icons';
+import { usePathname } from 'next/navigation';
 
 export const WhatsAppButton = () => {
+  const pathname = usePathname();
+  
+  if (pathname === '/portfolio') return null;
+
   return (
     <a
       href="https://wa.me/5571999454369"
