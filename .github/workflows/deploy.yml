@@ -31,4 +31,4 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./out/ # Pasta onde o Next.js gera o site estático
-          server-dir: ./italoferreiradoreaco1774445031000.1612207.meusitehostgator.com.br/ # Pasta correta do domínio 000
+          server-dir: ./public_html/ # Pasta raiz pública para o domínio principal da hospedagem
