@@ -5,10 +5,14 @@ import { Row, Col, Typography, Space, Divider } from 'antd';
 import { PhoneOutlined, MailOutlined, EnvironmentOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 const { Title, Text } = Typography;
 
 export const Footer = () => {
+  const pathname = usePathname();
+  if (pathname === '/portfolio') return null;
+
   return (
     <footer className="bg-locmaisTeal pt-12 pb-6 px-4 text-white">
       <div className="max-w-7xl mx-auto">
@@ -23,8 +27,8 @@ export const Footer = () => {
               Locação de equipamentos de pequeno e grande porte, tudo para sua obra. Reduza os custos e aumente a produtividade.
             </Text>
             <Space size="large" className="text-2xl mt-2">
-              <Link href="#" className="text-white hover:text-locmaisYellow transition-colors"><WhatsAppOutlined /></Link>
-              <Link href="#" className="text-white hover:text-locmaisYellow transition-colors"><MailOutlined /></Link>
+              <Link href="https://wa.me/5571999454369?text=Olá,%20vim%20pelo%20site%20e%20gostaria%20de%20falar%20com%20a%20equipe." target="_blank" rel="noopener noreferrer" className="text-white hover:text-locmaisYellow transition-colors"><WhatsAppOutlined /></Link>
+              <Link href="mailto:comercial@locmais.com.br" className="text-white hover:text-locmaisYellow transition-colors"><MailOutlined /></Link>
             </Space>
           </Col>
 

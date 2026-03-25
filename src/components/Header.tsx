@@ -1,38 +1,50 @@
 'use client';
 
 import React from 'react';
-import { Layout, Input, Button, Dropdown, Space, Typography, MenuProps } from 'antd';
+import { Layout, Input, Button, Dropdown, Space, Typography, MenuProps, AutoComplete } from 'antd';
 import { SearchOutlined, PhoneOutlined, MailOutlined, DownOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter, usePathname } from 'next/navigation';
 
 const { Header: AntHeader } = Layout;
 const { Text } = Typography;
 
-const categories = [
-  { key: 'terraplenagem', label: 'Terraplenagem', tipos: ['Retroescavadeiras', 'Rolos Compactadores', 'Mini Carregadeiras'] },
-  { key: 'elevacao', label: 'Elevação', tipos: ['Plataformas Tesoura', 'Plataformas Articuladas'] },
-  { key: 'energia', label: 'Energia', tipos: ['Geradores a Diesel', 'Torres de Iluminação'] },
-  { key: 'ferramentas', label: 'Ferramentas', tipos: ['Furadeiras', 'Serras', 'Marteletes'] },
-  { key: 'andaimes', label: 'Andaimes', tipos: ['Andaimes Tubulares', 'Acessórios'] },
-];
+export type MenuProduct = { id: string; name: string };
+export type MenuCategory = { key: string; label: string; products: MenuProduct[] };
 
-const categoryItems: MenuProps['items'] = categories.map(c => ({
-  key: c.key,
-  label: <Link href={`/?categoria=${c.key}`} className="font-medium hover:text-locmaisTeal">{c.label}</Link>,
-  children: c.tipos.map(t => ({
-    key: `${c.key}-${t}`,
-    label: <Link href={`/?categoria=${c.key}&tipo=${encodeURIComponent(t.toLowerCase().replace(' ', '-'))}`} className="hover:text-locmaisTeal">{t}</Link>
-  }))
-}));
+export const Header = ({ 
+  locacaoCategories, 
+  vendaCategories,
+  allProducts
+}: { 
+  locacaoCategories: MenuCategory[]; 
+  vendaCategories: MenuCategory[]; 
+  allProducts: MenuProduct[];
+}) => {
+  const router = useRouter();
+  const pathname = usePathname();
 
-const vendaItems: MenuProps['items'] = [
-  { key: 'venda-andaimes', label: <Link href="/vendas?categoria=andaimes" className="hover:text-locmaisTeal">Andaimes e Acessórios</Link> },
-  { key: 'venda-ferramentas', label: <Link href="/vendas?categoria=ferramentas" className="hover:text-locmaisTeal">Ferramentas Elétricas</Link> },
-  { key: 'venda-epis', label: <Link href="/vendas?categoria=epis" className="hover:text-locmaisTeal">EPIs e Segurança</Link> },
-];
+  if (pathname === '/portfolio') return null;
 
-export const Header = () => {
+  const categoryItems: MenuProps['items'] = locacaoCategories.length > 0 ? locacaoCategories.map(c => ({
+    key: c.key,
+    label: <Link href={`/?categoria=${c.key}`} className="font-medium hover:text-locmaisTeal">{c.label}</Link>,
+    children: c.products.map(p => ({
+      key: `loc-${p.id}`,
+      label: <Link href={`/produtos/${p.id}`} className="hover:text-locmaisTeal">{p.name}</Link>
+    }))
+  })) : [{ key: 'empty-loc', label: <span className="text-gray-400">Nenhum equipamento</span> }];
+
+  const vendaItems: MenuProps['items'] = vendaCategories.length > 0 ? vendaCategories.map(c => ({
+    key: `venda-${c.key}`,
+    label: <Link href={`/?categoria=${c.key}`} className="font-medium hover:text-locmaisTeal">{c.label}</Link>,
+    children: c.products.map(p => ({
+      key: `vend-${p.id}`,
+      label: <Link href={`/produtos/${p.id}`} className="hover:text-locmaisTeal">{p.name}</Link>
+    }))
+  })) : [{ key: 'empty-vend', label: <span className="text-gray-400">Nenhum produto à venda</span> }];
+
   return (
     <div className="w-full flex justify-center bg-white shadow-sm border-b border-gray-100 z-50 sticky top-0">
       <div className="w-full flex flex-col">
@@ -40,13 +52,13 @@ export const Header = () => {
         <div className="flex justify-between items-center py-1 px-4 md:px-8 lg:px-12 text-xs bg-gray-50 text-gray-600 border-b border-gray-200">
           <Space className="w-full max-w-7xl mx-auto flex justify-between">
             <Space>
-              <span className="flex items-center gap-1"><PhoneOutlined /> (71) 3625-6693 | (71) 99945-4369</span>
+              <span className="hidden md:flex items-center gap-1"><PhoneOutlined /> (71) 3625-6693 | (71) 99945-4369</span>
               <span className="flex items-center gap-1"><MailOutlined /> comercial@locmais.com.br</span>
             </Space>
             <Space>
               <Link href="/sobre" className="hover:text-locmaisTeal transition-colors">Sobre a Locmais</Link>
-              <span>|</span>
-              <Link href="/contato" className="hover:text-locmaisTeal transition-colors">Fale Conosco</Link>
+              <span className="hidden md:inline">|</span>
+              <Link href="/contato" className="hidden md:inline hover:text-locmaisTeal transition-colors">Fale Conosco</Link>
             </Space>
           </Space>
         </div>
@@ -59,18 +71,30 @@ export const Header = () => {
             </Link>
 
             <div className="flex-1 w-full md:max-w-xl mx-4">
-              <Input
-                size="large"
-                placeholder="Qual equipamento você precisa?"
-                prefix={<SearchOutlined className="text-gray-400" />}
-                className="rounded-full !border-gray-300 hover:!border-locmaisTeal focus:!border-locmaisTeal"
-              />
+              <AutoComplete
+                options={allProducts.map(p => ({ value: p.name, id: p.id }))}
+                onSelect={(val, option) => router.push(`/produtos/${option.id}`)}
+                filterOption={(inputValue, option) =>
+                  option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                }
+                className="w-full"
+                popupMatchSelectWidth={true}
+              >
+                <Input
+                  size="large"
+                  placeholder="Qual equipamento você precisa?"
+                  prefix={<SearchOutlined className="text-gray-400" />}
+                  className="rounded-full !border-gray-300 hover:!border-locmaisTeal focus:!border-locmaisTeal"
+                />
+              </AutoComplete>
             </div>
 
             <Space>
-              <Button type="primary" size="large" className="font-semibold bg-locmaisYellow hover:!bg-[#e5a50c] border-none text-white shadow-md">
-                Solicitar Orçamento
-              </Button>
+              <Link href="https://wa.me/5571999454369?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento!" target="_blank" rel="noopener noreferrer">
+                <Button type="primary" size="large" className="font-semibold bg-locmaisYellow hover:!bg-[#e5a50c] border-none text-white shadow-md">
+                  Solicitar Orçamento
+                </Button>
+              </Link>
             </Space>
           </div>
         </div>

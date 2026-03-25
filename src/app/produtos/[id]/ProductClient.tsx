@@ -2,21 +2,19 @@
 
 import React from 'react';
 import { Typography, Row, Col, Button, Tag, Divider, Breadcrumb } from 'antd';
-import { CheckCircleFilled, FilePdfOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
-import { Product, getCategoryById } from '@/lib/mockData';
+import { CheckCircleFilled, FilePdfOutlined, SafetyCertificateOutlined, WhatsAppOutlined } from '@ant-design/icons';
+import { Product } from '@/lib/api';
 import Link from 'next/link';
 
 const { Title, Paragraph, Text } = Typography;
 
 export function ProductClient({ product }: { product: Product }) {
-  const category = getCategoryById(product.categoryId);
-
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
       {/* Breadcrumbs */}
       <Breadcrumb className="mb-8" items={[
         { title: <Link href="/">Home</Link> },
-        { title: <Link href={`/?categoria=${category?.id}`}>{category?.name}</Link> },
+        { title: <Link href={`/?categoria=${product.categoryId}`}>{product.categoryName}</Link> },
         { title: product.name }
       ]} />
 
@@ -26,7 +24,7 @@ export function ProductClient({ product }: { product: Product }) {
             <img 
               src={product.imageUrl} 
               alt={product.name} 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain p-4 bg-white"
             />
             <div className="absolute top-4 left-4">
               <Tag color="cyan" className="!bg-white !text-locmaisTeal font-bold px-3 py-1 shadow-sm border-gray-200">
@@ -34,29 +32,33 @@ export function ProductClient({ product }: { product: Product }) {
               </Tag>
             </div>
           </div>
-          <div className="flex mt-4 gap-4">
-            <div className="w-24 h-24 bg-gray-200 rounded cursor-pointer border-2 border-locmaisTeal/50 overflow-hidden">
-               <img src={product.imageUrl} alt="thumb" className="w-full h-full object-cover"/>
-            </div>
-            <div className="w-24 h-24 bg-gray-100 rounded cursor-not-allowed hidden md:block"></div>
-            <div className="w-24 h-24 bg-gray-100 rounded cursor-not-allowed hidden md:block"></div>
-          </div>
         </Col>
 
         <Col xs={24} md={12}>
           <Title level={1} className="!text-3xl !font-bold !text-gray-800 !mb-2">
             {product.name}
           </Title>
-          <Text className="text-gray-500 text-lg block mb-6">{product.shortDescription}</Text>
+          <Text className="text-gray-500 text-lg block mb-2">{product.shortDescription}</Text>
+          {product.price && (
+            <div className="mb-4">
+               <Text className="text-3xl font-bold text-locmaisTeal">R$ {product.price}</Text>
+               {product.priceObservation && <Text className="block text-gray-500 text-sm mt-1">{product.priceObservation}</Text>}
+            </div>
+          )}
           
           <div className="bg-orange-50/50 p-6 rounded-lg border border-orange-100 mb-8 max-w-sm">
             <Title level={5} className="!uppercase !text-xs !tracking-widest !text-gray-500 !mb-4">Solicite uma Cotação</Title>
-            <Button type="primary" size="large" className="w-full bg-locmaisYellow hover:!bg-[#e5a50c] border-none font-bold text-white shadow-md mb-3">
-              Alugar Este Equipamento
-            </Button>
-            <Button size="large" className="w-full border-locmaisTeal text-locmaisTeal hover:!bg-teal-50 hover:!border-locmaisTeal font-semibold">
-              Falar Via WhatsApp
-            </Button>
+            <a 
+              href={`https://wa.me/5571999454369?text=${encodeURIComponent(`Olá! Gostaria de cotar o equipamento: ${product.name}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full"
+            >
+              <Button size="large" className="w-full border-2 border-locmaisTeal text-locmaisTeal hover:!bg-teal-50 hover:!border-locmaisTeal hover:!text-locmaisTeal font-bold shadow-sm flex items-center justify-center gap-2">
+                <WhatsAppOutlined className="text-xl" />
+                Cotar Este Equipamento
+              </Button>
+            </a>
           </div>
 
           <Divider />
@@ -79,7 +81,7 @@ export function ProductClient({ product }: { product: Product }) {
           <Row gutter={[16, 16]}>
             <Col span={12}>
               <a 
-                href="/manuais/portfolio-equipamentos-locmais.pdf" 
+                href="/portfolio" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded text-center hover:bg-gray-50 cursor-pointer transition-colors block"
