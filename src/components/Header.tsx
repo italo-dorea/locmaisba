@@ -116,14 +116,14 @@ export const Header = ({
             </div>
             <div className="flex gap-8 items-center">
               <Link href="/sobre" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Institucional <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
-              <Dropdown menu={{ items: [
+              {/* <Dropdown menu={{ items: [
                 { key: 'fornecedores', label: <Link href="/parceiros?aba=fornecedores" className="hover:text-locmaisTeal">Fornecedores</Link> },
                 { key: 'clientes', label: <Link href="/parceiros?aba=clientes" className="hover:text-locmaisTeal">Clientes</Link> }
               ] }} placement="bottomLeft">
                 <a onClick={(e) => e.preventDefault()} className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1 cursor-pointer">
                   Parceiros <DownOutlined className="text-[10px] text-locmaisTeal" />
                 </a>
-              </Dropdown>
+              </Dropdown> */}
               <Link href="/contato?assunto=trabalhe-conosco" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Trabalhe Conosco <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
               <Link href="/contato" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Fale Conosco <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
             </div>
