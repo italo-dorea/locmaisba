@@ -91,10 +91,10 @@ export function ProductClient({ product }: { product: Product }) {
               </a>
             </Col>
             <Col span={12}>
-              <div className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded text-center hover:bg-gray-50 cursor-pointer transition-colors">
+              <a href="/sobre" className="flex flex-col items-center justify-center p-4 border border-gray-200 rounded text-center hover:bg-gray-50 cursor-pointer transition-colors block">
                 <SafetyCertificateOutlined className="text-2xl text-locmaisTeal mb-2" />
                 <Text className="font-semibold text-gray-700">Normas NRs</Text>
-              </div>
+              </a>
             </Col>
           </Row>
         </Col>

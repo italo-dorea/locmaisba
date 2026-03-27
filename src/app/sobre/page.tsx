@@ -20,14 +20,14 @@ export default function SobrePage() {
       <Row gutter={[48, 48]} className="mb-16">
         <Col xs={24} md={12}>
           <div className="relative h-96 rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center border-4 border-white shadow-xl">
-             <img src="https://placehold.co/800x600/eeeeee/888888?text=Nossa+Frota" alt="Frota LOCMAIS" className="w-full h-full object-cover" />
+             <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80" alt="Equipe LOCMAIS" className="w-full h-full object-cover" />
           </div>
         </Col>
         <Col xs={24} md={12} className="flex flex-col justify-center">
           <Title level={2} className="!text-locmaisTeal !mb-6">Nossa Missão</Title>
           <Paragraph className="text-base text-gray-600 leading-relaxed mb-6">
-            Fornecer soluções eficientes em locação de equipamentos, garantindo a produtividade 
-            e segurança nas obras de nossos clientes. Acreditamos que o sucesso do seu projeto 
+            Fornecer soluções eficientes em locação de equipamentos, contribuindo com a produtividade e segurança 
+            nas obras de nossos clientes. Acreditamos que o sucesso do seu projeto 
             começa com a ferramenta certa na hora certa.
           </Paragraph>
           <Paragraph className="text-base text-gray-600 leading-relaxed">
@@ -39,27 +39,27 @@ export default function SobrePage() {
 
       <Row gutter={[24, 24]} className="mb-16">
         <Col xs={24} sm={12} md={6}>
-          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50">
+          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50 flex flex-col justify-center py-6">
             <SafetyOutlined className="text-4xl text-locmaisTeal mb-4" />
-            <Statistic title="Equipamentos Revisados" value="100%" valueStyle={{ color: '#127184', fontWeight: 'bold' }} />
+            <Title level={5} className="!text-gray-700 !m-0">Equipamentos Revisados</Title>
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50">
+          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50 flex flex-col justify-center py-6">
             <EnvironmentOutlined className="text-4xl text-locmaisTeal mb-4" />
-             <Statistic title="Cidades Atendidas" value={45} suffix="+" valueStyle={{ color: '#127184', fontWeight: 'bold' }} />
+            <Title level={5} className="!text-gray-700 !m-0">Cidades Atendidas</Title>
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50">
+          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50 flex flex-col justify-center py-6">
             <ThunderboltOutlined className="text-4xl text-locmaisTeal mb-4" />
-             <Statistic title="Agilidade na Entrega" value="24h" valueStyle={{ color: '#127184', fontWeight: 'bold' }} />
+            <Title level={5} className="!text-gray-700 !m-0">Agilidade na Entrega</Title>
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50">
+          <Card className="text-center h-full border-t-4 border-t-locmaisTeal bg-gray-50 flex flex-col justify-center py-6">
             <TeamOutlined className="text-4xl text-locmaisTeal mb-4" />
-             <Statistic title="Clientes Satisfeitos" value="5.000+" valueStyle={{ color: '#127184', fontWeight: 'bold' }} />
+            <Title level={5} className="!text-gray-700 !m-0">Clientes Satisfeitos</Title>
           </Card>
         </Col>
       </Row>

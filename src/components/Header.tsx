@@ -52,8 +52,8 @@ export const Header = ({
         <div className="flex justify-between items-center py-1 px-4 md:px-8 lg:px-12 text-xs bg-gray-50 text-gray-600 border-b border-gray-200">
           <Space className="w-full max-w-7xl mx-auto flex justify-between">
             <Space>
-              <span className="hidden md:flex items-center gap-1"><PhoneOutlined /> (71) 3625-6693 | (71) 99945-4369</span>
-              <span className="flex items-center gap-1"><MailOutlined /> comercial@locmais.com.br</span>
+              <span className="hidden md:flex items-center gap-1"><PhoneOutlined /> (71) 3625-6693 | (71) 99945-4369 | (71) 9256-3118</span>
+              <span className="flex items-center gap-1"><MailOutlined /> comercial@locmaisba.com.br</span>
             </Space>
             <Space>
               <Link href="/sobre" className="hover:text-locmaisTeal transition-colors">Sobre a Locmais</Link>
@@ -116,7 +116,14 @@ export const Header = ({
             </div>
             <div className="flex gap-8 items-center">
               <Link href="/sobre" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Institucional <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
-              <Link href="/blog" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Blog <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
+              <Dropdown menu={{ items: [
+                { key: 'fornecedores', label: <Link href="/parceiros?aba=fornecedores" className="hover:text-locmaisTeal">Fornecedores</Link> },
+                { key: 'clientes', label: <Link href="/parceiros?aba=clientes" className="hover:text-locmaisTeal">Clientes</Link> }
+              ] }} placement="bottomLeft">
+                <a onClick={(e) => e.preventDefault()} className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1 cursor-pointer">
+                  Parceiros <DownOutlined className="text-[10px] text-locmaisTeal" />
+                </a>
+              </Dropdown>
               <Link href="/contato?assunto=trabalhe-conosco" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Trabalhe Conosco <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
               <Link href="/contato" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Fale Conosco <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
             </div>

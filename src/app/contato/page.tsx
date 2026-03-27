@@ -79,14 +79,6 @@ function ContactContent() {
                     CEP: 42.850-000
                   </Text>
                 </div>
-                <div>
-                  <Text className="text-locmaisYellow font-semibold block">Filial (Paraíba)</Text>
-                  <Text className="text-gray-300">
-                    Agostinho C. J. Justo, n° 51<br/>
-                    Quadra Lote 42, Patos/PB<br/>
-                    CEP: 58.706-580
-                  </Text>
-                </div>
               </div>
             </div>
 
@@ -95,7 +87,8 @@ function ContactContent() {
               <div>
                 <Text className="text-gray-200 block text-lg font-bold mb-1">Telefones</Text>
                 <Text className="text-gray-300 block">(71) 3625-6693 (Fixo)</Text>
-                <Text className="text-gray-300 block">(71) 99945-4369 (WhatsApp)</Text>
+                <Text className="text-gray-300 block">(71) 99945-4369 (WhatsApp Comercial 1)</Text>
+                <Text className="text-gray-300 block">(71) 9256-3118 (WhatsApp Comercial 2)</Text>
               </div>
             </div>
 

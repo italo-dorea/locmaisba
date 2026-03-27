@@ -24,11 +24,13 @@ export const Footer = () => {
             </div>
             <Text className="text-gray-300 block mb-4">
               A LOCMAIS é uma empresa fundada em 16/07/2014, criada para atender clientes públicos e privados em serviços de construção e locação de equipamentos.<br/><br/>
-              Locação de equipamentos de pequeno e grande porte, tudo para sua obra. Reduza os custos e aumente a produtividade.
+              Locação de equipamentos de pequeno e grande porte para sua obra. Reduza os custos e aumente a produtividade.
             </Text>
-            <Space size="large" className="text-2xl mt-2">
-              <Link href="https://wa.me/5571999454369?text=Olá,%20vim%20pelo%20site%20e%20gostaria%20de%20falar%20com%20a%20equipe." target="_blank" rel="noopener noreferrer" className="text-white hover:text-locmaisYellow transition-colors"><WhatsAppOutlined /></Link>
-              <Link href="mailto:comercial@locmais.com.br" className="text-white hover:text-locmaisYellow transition-colors"><MailOutlined /></Link>
+            <Space size="middle" direction="vertical" className="mt-2">
+              <Space className="flex items-center gap-2 mt-2">
+                <Link href="mailto:comercial@locmaisba.com.br" className="text-white text-xl hover:text-locmaisYellow transition-colors"><MailOutlined /></Link>
+                <Text className="text-white">comercial@locmaisba.com.br</Text>
+              </Space>
             </Space>
           </Col>
 
@@ -38,7 +40,7 @@ export const Footer = () => {
             <Space direction="vertical" size="middle">
               <Link href="/sobre" className="text-gray-200 hover:text-white transition-colors block">Sobre Nós</Link>
               <Link href="/servicos" className="text-gray-200 hover:text-white transition-colors block">Nossos Serviços</Link>
-              <Link href="/faq" className="text-gray-200 hover:text-white transition-colors block">Dúvidas Frequentes</Link>
+              <Link href="/parceiros" className="text-gray-200 hover:text-white transition-colors block">Clientes e Fornecedores</Link>
               <Link href="/contato?assunto=trabalhe-conosco" className="text-gray-200 hover:text-white transition-colors block">Trabalhe Conosco</Link>
             </Space>
           </Col>
@@ -47,10 +49,13 @@ export const Footer = () => {
           <Col xs={24} sm={12} md={5}>
             <Title level={4} className="!text-locmaisYellow !mb-6">Categorias</Title>
             <Space direction="vertical" size="middle">
-              <Link href="/?categoria=terraplenagem" className="text-gray-200 hover:text-white transition-colors block">Terraplenagem</Link>
-              <Link href="/?categoria=elevacao" className="text-gray-200 hover:text-white transition-colors block">Elevação</Link>
-              <Link href="/?categoria=energia" className="text-gray-200 hover:text-white transition-colors block">Geradores de Energia</Link>
-              <Link href="/?categoria=andaimes" className="text-gray-200 hover:text-white transition-colors block">Andaimes e Escoras</Link>
+              <Link href="/?categoria=movimentacao-terra" className="text-gray-200 hover:text-white transition-colors block">Movimentação Terra</Link>
+              <Link href="/?categoria=equipamentos-eletricos" className="text-gray-200 hover:text-white transition-colors block">Equipamentos Elétricos</Link>
+              <Link href="/?categoria=equipamentos-pneumaticos" className="text-gray-200 hover:text-white transition-colors block">Equipamentos Pneumáticos</Link>
+              <Link href="/?categoria=elevacao-carga" className="text-gray-200 hover:text-white transition-colors block">Elevação de Carga</Link>
+              <Link href="/?categoria=equipamentos-solda" className="text-gray-200 hover:text-white transition-colors block">Equipamentos de Solda</Link>
+              <Link href="/?categoria=bombas" className="text-gray-200 hover:text-white transition-colors block">Bombas</Link>
+              <Link href="/?categoria=escoramento-metalico-tipo-w" className="text-gray-200 hover:text-white transition-colors block">Escoramento Metálico Tipo W</Link>
             </Space>
           </Col>
 
@@ -67,22 +72,19 @@ export const Footer = () => {
                   CEP: 42.850-000
                 </Text>
               </div>
-              <div className="flex items-start">
-                <EnvironmentOutlined className="text-xl mr-3 text-locmaisYellow mt-1" />
-                <Text className="text-gray-200 block">
-                  <strong className="text-white">Filial (Paraíba)</strong><br />
-                  Agostinho C. J. Justo, n° 51<br />
-                  Quadra Lote 42, Patos/PB<br />
-                  CEP: 58.706-580
-                </Text>
-              </div>
               <div className="flex items-center mt-2">
                 <PhoneOutlined className="text-xl mr-3 text-locmaisYellow" />
                 <Text className="text-gray-200">(71) 3625-6693</Text>
               </div>
-              <div className="flex items-center">
-                <WhatsAppOutlined className="text-xl mr-3 text-locmaisYellow" />
-                <Text className="text-gray-200">(71) 99945-4369</Text>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center">
+                  <WhatsAppOutlined className="text-xl mr-3 text-locmaisYellow" />
+                  <Text className="text-gray-200">(71) 99945-4369</Text>
+                </div>
+                <div className="flex items-center">
+                  <WhatsAppOutlined className="text-xl mr-3 text-locmaisYellow" />
+                  <Text className="text-gray-200">(71) 9256-3118</Text>
+                </div>
               </div>
             </Space>
           </Col>

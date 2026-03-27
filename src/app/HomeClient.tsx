@@ -32,9 +32,11 @@ export default function HomeClient({ initialProducts, initialCategories }: { ini
                 Alugue as melhores marcas do mercado com garantia de manutenção, 
                 suporte técnico e entrega rápida na sua obra.
               </Paragraph>
-              <Button type="primary" size="large" className="bg-locmaisYellow hover:!bg-[#e5a50c] border-none font-bold text-white px-8 h-12 text-lg shadow-lg">
-                Ver Catálogo Completo
-              </Button>
+              <Link href="/portfolio" target="_blank" rel="noopener noreferrer">
+                <Button type="primary" size="large" className="bg-locmaisYellow hover:!bg-[#e5a50c] border-none font-bold text-white px-8 h-12 text-lg shadow-lg">
+                  Ver Catálogo Completo
+                </Button>
+              </Link>
             </div>
             {/* Decorative element */}
             <div className="hidden md:block w-72 h-72 bg-white/10 rounded-full border-4 border-locmaisYellow/30 flex items-center justify-center p-4 backdrop-blur-sm">
