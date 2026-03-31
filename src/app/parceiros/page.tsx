@@ -33,7 +33,7 @@ function ParceirosContent() {
     <div className="animate-fadeIn">
       <Row gutter={[48, 48]} className="mb-16 mt-8 items-center">
         <Col xs={24} md={12}>
-          <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=800&q=80" alt="Clientes Loc Mais" className="w-full h-96 object-cover rounded-xl shadow-lg border-2 border-white" />
+          <img src="https://imgs.search.brave.com/VmRUIhtWUXXwMVAA1tiKEpDwjvEDJvs_2devyvIvTbU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly96ZW52/aWEuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDIwLzAzL0lN/QUdFTS1aRU5WSUEu/anBnPzE" alt="Clientes e Parcerias B2B Loc Mais" className="w-full h-96 object-cover rounded-xl shadow-lg border-2 border-white" />
         </Col>
         <Col xs={24} md={12}>
            <Title level={2} className="!text-locmaisTeal !mb-6">Construindo Juntos</Title>

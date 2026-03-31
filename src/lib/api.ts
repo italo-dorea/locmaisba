@@ -17,9 +17,9 @@ export interface Product {
   features: string[];
   imageUrl: string;
   price?: string | null;
-  priceObservation?: string | null;
   generalObservations?: string | null;
   businessType?: string | null;
+  condition?: string;
 }
 
 export interface RawSheetProduct {
@@ -34,6 +34,8 @@ export interface RawSheetProduct {
   Categoria: string;
   tipo_de_negocio: string;
   imagem: string;
+  condicao?: string;
+  Condicao?: string;
 }
 
 function slugify(text: string) {
@@ -90,10 +92,28 @@ export async function fetchProducts(): Promise<Product[]> {
         }
       }
 
+      const categoryName = item.Categoria || 'Outros';
+
+      const tnStr = (item.tipo_de_negocio || '').toLowerCase();
+      const isVenda = tnStr.includes('venda');
+
+      let condition: string | undefined = undefined;
+
+      if (isVenda) {
+        condition = 'Usado'; // default fallback for sales
+        const condStr = (item.condicao || item.Condicao || '').toLowerCase();
+
+        if (condStr.includes('novo') || tnStr.includes('novo')) {
+          condition = 'Novo';
+        } else if (condStr.includes('usado') || tnStr.includes('usado')) {
+          condition = 'Usado';
+        }
+      }
+
       return {
         id: item.id.toString(),
-        categoryId: slugify(item.Categoria || 'outros'),
-        categoryName: item.Categoria || 'Outros',
+        categoryId: slugify(categoryName),
+        categoryName: categoryName,
         name: item.nome,
         brand: item.subdescricao?.split(' ')[0] || 'Geral', // naive brand
         shortDescription: item.subdescricao || '',
@@ -103,7 +123,8 @@ export async function fetchProducts(): Promise<Product[]> {
         price: formatPrice(item.preco),
         priceObservation: item.Observacao_preco,
         generalObservations: item.observacoes_gerais,
-        businessType: item.tipo_de_negocio
+        businessType: item.tipo_de_negocio,
+        condition
       };
     });
   } catch (error) {

@@ -15,11 +15,13 @@ export type MenuCategory = { key: string; label: string; products: MenuProduct[]
 
 export const Header = ({ 
   locacaoCategories, 
-  vendaCategories,
+  vendaNovosCategories,
+  vendaUsadosCategories,
   allProducts
 }: { 
   locacaoCategories: MenuCategory[]; 
-  vendaCategories: MenuCategory[]; 
+  vendaNovosCategories: MenuCategory[]; 
+  vendaUsadosCategories: MenuCategory[]; 
   allProducts: MenuProduct[];
 }) => {
   const router = useRouter();
@@ -36,14 +38,30 @@ export const Header = ({
     }))
   })) : [{ key: 'empty-loc', label: <span className="text-gray-400">Nenhum equipamento</span> }];
 
-  const vendaItems: MenuProps['items'] = vendaCategories.length > 0 ? vendaCategories.map(c => ({
-    key: `venda-${c.key}`,
-    label: <Link href={`/?categoria=${c.key}`} className="font-medium hover:text-locmaisTeal">{c.label}</Link>,
-    children: c.products.map(p => ({
-      key: `vend-${p.id}`,
-      label: <Link href={`/produtos/${p.id}`} className="hover:text-locmaisTeal">{p.name}</Link>
-    }))
-  })) : [{ key: 'empty-vend', label: <span className="text-gray-400">Nenhum produto à venda</span> }];
+  const buildVendaChildren = (categories: MenuCategory[], prefix: string): MenuProps['items'] => {
+    return categories.length > 0 ? categories.map(c => ({
+      key: `${prefix}-${c.key}`,
+      label: <span className="font-medium text-gray-800">{c.label}</span>,
+      type: 'group' as const,
+      children: c.products.map(p => ({
+        key: `${prefix}-prod-${p.id}`,
+        label: <Link href={`/produtos/${p.id}`} className="hover:text-locmaisTeal">{p.name}</Link>
+      }))
+    })) : [{ key: `empty-${prefix}`, label: <span className="text-gray-400">Nenhum produto</span> }];
+  };
+
+  const vendaItems: MenuProps['items'] = [
+    {
+      key: 'venda-novos',
+      label: <span className="font-bold text-locmaisTeal uppercase text-[11px]">Novos</span>,
+      children: buildVendaChildren(vendaNovosCategories, 'novos')
+    },
+    {
+      key: 'venda-usados',
+      label: <span className="font-bold text-locmaisTeal uppercase text-[11px]">Usados</span>,
+      children: buildVendaChildren(vendaUsadosCategories, 'usados')
+    }
+  ];
 
   return (
     <div className="w-full flex justify-center bg-white shadow-sm border-b border-gray-100 z-50 sticky top-0">
@@ -116,14 +134,14 @@ export const Header = ({
             </div>
             <div className="flex gap-8 items-center">
               <Link href="/sobre" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Institucional <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
-              {/* <Dropdown menu={{ items: [
-                { key: 'fornecedores', label: <Link href="/parceiros?aba=fornecedores" className="hover:text-locmaisTeal">Fornecedores</Link> },
-                { key: 'clientes', label: <Link href="/parceiros?aba=clientes" className="hover:text-locmaisTeal">Clientes</Link> }
+              <Dropdown menu={{ items: [
+                { key: 'clientes', label: <Link href="/parceiros?aba=clientes" className="hover:text-locmaisTeal">Clientes</Link> },
+                { key: 'fornecedores', label: <Link href="/parceiros?aba=fornecedores" className="hover:text-locmaisTeal">Fornecedores</Link> }
               ] }} placement="bottomLeft">
                 <a onClick={(e) => e.preventDefault()} className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1 cursor-pointer">
                   Parceiros <DownOutlined className="text-[10px] text-locmaisTeal" />
                 </a>
-              </Dropdown> */}
+              </Dropdown>
               <Link href="/contato?assunto=trabalhe-conosco" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Trabalhe Conosco <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
               <Link href="/contato" className="hover:text-locmaisTeal text-gray-800 transition-colors flex items-center gap-1">Fale Conosco <ArrowRightOutlined className="text-[10px] text-locmaisTeal" /></Link>
             </div>

@@ -20,6 +20,11 @@ function ContactContent() {
       form.setFieldsValue({
         subject: 'Trabalhe Conosco / Envio de Currículo'
       });
+    } else {
+      setIsTrabalheConosco(false);
+      form.setFieldsValue({
+        subject: ''
+      });
     }
   }, [searchParams, form]);
 
@@ -74,9 +79,11 @@ function ContactContent() {
                 <div className="mb-4">
                   <Text className="text-locmaisYellow font-semibold block">Sede (Bahia)</Text>
                   <Text className="text-gray-300">
-                    Av. Ayrton Senna, n° 831, SL 01<br/>
-                    Petrópolis, Dias d'Ávila/BA<br/>
-                    CEP: 42.850-000
+                    <a href="https://maps.google.com/?q=Av.+Ayrton+Senna,+831+-+Petrópolis,+Dias+d'Ávila+-+BA,+42850-000" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
+                      Av. Ayrton Senna, n° 831, SL 01<br/>
+                      Petrópolis, Dias d'Ávila/BA<br/>
+                      CEP: 42.850-000
+                    </a>
                   </Text>
                 </div>
               </div>

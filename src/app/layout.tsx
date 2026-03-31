@@ -45,10 +45,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     return bt === '' || bt.includes('locacao');
   });
 
-  // Venda: explicitly has 'venda'
-  const vendaCategories = buildMenu(p => {
+  const vendaNovosCategories = buildMenu(p => {
     const bt = (p.businessType || '').toLowerCase();
-    return bt.includes('venda');
+    return bt.includes('venda') && p.condition?.toLowerCase() === 'novo';
+  });
+
+  const vendaUsadosCategories = buildMenu(p => {
+    const bt = (p.businessType || '').toLowerCase();
+    return bt.includes('venda') && p.condition?.toLowerCase() === 'usado';
   });
 
   const allProducts = produtos.map(p => ({ id: p.id, name: p.name }));
@@ -58,7 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="flex flex-col min-h-screen bg-gray-50">
         <AntdRegistry>
           <ConfigProvider theme={locmaisTheme} locale={ptBR}>
-            <Header locacaoCategories={locacaoCategories} vendaCategories={vendaCategories} allProducts={allProducts} />
+            <Header locacaoCategories={locacaoCategories} vendaNovosCategories={vendaNovosCategories} vendaUsadosCategories={vendaUsadosCategories} allProducts={allProducts} />
             <main className="flex-1 w-full bg-white min-h-[60vh]">
               {children}
             </main>

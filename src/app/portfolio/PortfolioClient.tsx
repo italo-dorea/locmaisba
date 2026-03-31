@@ -74,6 +74,13 @@ export function PortfolioClient({ categories }: { categories: [string, Product[]
                          {p.brand}
                        </div>
 
+                       {/* Condition tag */}
+                       {p.condition && (
+                         <div className="absolute top-0 left-0 bg-[#ffc300] text-[#0a4f5c] text-[9px] print:text-[7px] font-black tracking-widest px-2 py-1.5 print:px-1.5 print:py-1 rounded-br-lg uppercase z-10 shadow-sm">
+                           {p.condition}
+                         </div>
+                       )}
+
                        {/* Image container */}
                        <div className="w-full aspect-[4/3] bg-gray-50 rounded flex items-center justify-center p-2 mb-3 print:mb-1.5 border border-gray-100 overflow-hidden shrink-0">
                          <img src={p.imageUrl} alt={p.name} className="w-full h-full object-contain" />
