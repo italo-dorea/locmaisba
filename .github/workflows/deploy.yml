@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main # O deploy acontecerá sempre que a branch main for atualizada
+  workflow_dispatch: # Permite disparar manualmente via botão no GitHub
+  repository_dispatch:
+    types: [update-sheets] # Permite disparar via API (pelo Google Sheets)
 
 jobs:
   build-and-deploy:
