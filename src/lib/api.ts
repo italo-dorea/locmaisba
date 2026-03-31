@@ -17,6 +17,7 @@ export interface Product {
   features: string[];
   imageUrl: string;
   price?: string | null;
+  priceObservation?: string | null;
   generalObservations?: string | null;
   businessType?: string | null;
   condition?: string;
