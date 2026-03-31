@@ -50,7 +50,7 @@ function slugify(text: string) {
 
 // Convert google drive view links to preview or raw image links if necessary, 
 // but for simplicity we'll keep the string.
-const URL = 'https://script.google.com/macros/s/AKfycbzPn3onhdIgelp4LaKbhCakG70l9U0OvrNiT6pRmV54QmzIfOZtdA_uWSuPsqPBm48v/exec';
+const URL = 'https://script.google.com/macros/s/AKfycbyhKoMIihHywbqGUEtfLQVWIG3KF0LgrnLUEAqAVZcE1gSNbmMpUNT07Y1_Wm_MvPLG/exec';
 
 function formatPrice(preco: string | number | undefined | null): string | null {
   if (!preco) return null;
