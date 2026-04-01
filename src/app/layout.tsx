@@ -66,7 +66,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <main className="flex-1 w-full bg-white min-h-[60vh]">
               {children}
             </main>
-            <Footer />
+            <Footer locacaoCategories={locacaoCategories} vendaNovosCategories={vendaNovosCategories} vendaUsadosCategories={vendaUsadosCategories} />
             <WhatsAppButton />
           </ConfigProvider>
         </AntdRegistry>

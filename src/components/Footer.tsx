@@ -7,11 +7,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
+import { MenuCategory } from './Header';
+
 const { Title, Text } = Typography;
 
-export const Footer = () => {
+export const Footer = ({ locacaoCategories = [], vendaNovosCategories = [], vendaUsadosCategories = [] }: {
+  locacaoCategories?: MenuCategory[];
+  vendaNovosCategories?: MenuCategory[];
+  vendaUsadosCategories?: MenuCategory[];
+}) => {
   const pathname = usePathname();
   if (pathname === '/portfolio') return null;
+
+  const allCatsMap = new Map<string, string>();
+  [...locacaoCategories, ...vendaNovosCategories, ...vendaUsadosCategories].forEach(c => {
+    if (c.key !== 'empty-loc' && !c.key.startsWith('empty-')) {
+      allCatsMap.set(c.key, c.label);
+    }
+  });
+  const uniqueCategories = Array.from(allCatsMap.entries()).map(([key, label]) => ({ key, label })).slice(0, 8);
 
   return (
     <footer className="bg-locmaisTeal pt-12 pb-6 px-4 text-white">
@@ -49,13 +63,14 @@ export const Footer = () => {
           <Col xs={24} sm={12} md={5}>
             <Title level={4} className="!text-locmaisYellow !mb-6">Categorias</Title>
             <Space direction="vertical" size="middle">
-              <Link href="/?categoria=movimentacao-terra" className="text-gray-200 hover:text-white transition-colors block">Movimentação Terra</Link>
-              <Link href="/?categoria=equipamentos-eletricos" className="text-gray-200 hover:text-white transition-colors block">Equipamentos Elétricos</Link>
-              <Link href="/?categoria=equipamentos-pneumaticos" className="text-gray-200 hover:text-white transition-colors block">Equipamentos Pneumáticos</Link>
-              <Link href="/?categoria=elevacao-carga" className="text-gray-200 hover:text-white transition-colors block">Elevação de Carga</Link>
-              <Link href="/?categoria=equipamentos-solda" className="text-gray-200 hover:text-white transition-colors block">Equipamentos de Solda</Link>
-              <Link href="/?categoria=bombas" className="text-gray-200 hover:text-white transition-colors block">Bombas</Link>
-              <Link href="/?categoria=escoramento-metalico-tipo-w" className="text-gray-200 hover:text-white transition-colors block">Escoramento Metálico Tipo W</Link>
+              {uniqueCategories.map(c => (
+                <Link key={c.key} href={`/?categoria=${c.key}`} className="text-gray-200 hover:text-white transition-colors block">
+                  {c.label}
+                </Link>
+              ))}
+              {uniqueCategories.length === 0 && (
+                <Text className="text-gray-400">Nenhuma categoria</Text>
+              )}
             </Space>
           </Col>
 

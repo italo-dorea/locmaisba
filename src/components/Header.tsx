@@ -41,8 +41,7 @@ export const Header = ({
   const buildVendaChildren = (categories: MenuCategory[], prefix: string): MenuProps['items'] => {
     return categories.length > 0 ? categories.map(c => ({
       key: `${prefix}-${c.key}`,
-      label: <span className="font-medium text-gray-800">{c.label}</span>,
-      type: 'group' as const,
+      label: <Link href={`/?categoria=${c.key}`} className="font-medium text-gray-800 hover:text-locmaisTeal">{c.label}</Link>,
       children: c.products.map(p => ({
         key: `${prefix}-prod-${p.id}`,
         label: <Link href={`/produtos/${p.id}`} className="hover:text-locmaisTeal">{p.name}</Link>
@@ -53,12 +52,12 @@ export const Header = ({
   const vendaItems: MenuProps['items'] = [
     {
       key: 'venda-novos',
-      label: <span className="font-bold text-locmaisTeal uppercase text-[11px]">Novos</span>,
+      label: <span className="font-bold text-locmaisTeal text-[11px]">Novos</span>,
       children: buildVendaChildren(vendaNovosCategories, 'novos')
     },
     {
       key: 'venda-usados',
-      label: <span className="font-bold text-locmaisTeal uppercase text-[11px]">Usados</span>,
+      label: <span className="font-bold text-locmaisTeal text-[11px]">Usados</span>,
       children: buildVendaChildren(vendaUsadosCategories, 'usados')
     }
   ];
