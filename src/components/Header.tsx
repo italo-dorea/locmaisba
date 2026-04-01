@@ -52,12 +52,12 @@ export const Header = ({
   const vendaItems: MenuProps['items'] = [
     {
       key: 'venda-novos',
-      label: <span className="font-bold text-locmaisTeal text-[11px]">Novos</span>,
+      label: <span className="font-bold text-locmaisTeal text-sm">Novos</span>,
       children: buildVendaChildren(vendaNovosCategories, 'novos')
     },
     {
       key: 'venda-usados',
-      label: <span className="font-bold text-locmaisTeal text-[11px]">Usados</span>,
+      label: <span className="font-bold text-locmaisTeal text-sm">Usados</span>,
       children: buildVendaChildren(vendaUsadosCategories, 'usados')
     }
   ];
