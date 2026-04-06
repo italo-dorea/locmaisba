@@ -39,7 +39,7 @@ export function ProductClient({ product }: { product: Product }) {
             {product.name}
           </Title>
           <Text className="text-gray-500 text-lg block mb-2">{product.shortDescription}</Text>
-          {product.price && (
+          {product.price && product.condition === 'Usado' && (
             <div className="mb-4">
                <Text className="text-3xl font-bold text-locmaisTeal">R$ {product.price}</Text>
                {product.priceObservation && <Text className="block text-gray-500 text-sm mt-1">{product.priceObservation}</Text>}

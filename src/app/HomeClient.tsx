@@ -108,7 +108,9 @@ export default function HomeClient({ initialProducts, initialCategories }: { ini
                         {product.shortDescription}
                       </Paragraph>
                       <div className="mt-auto pt-4 border-t border-gray-100 flex justify-between items-center text-locmaisTeal font-bold">
-                        <span className="text-lg text-gray-800">R$ {product.price || 'Sob Consulta'}</span>
+                        <span className="text-lg text-gray-800">
+                          {product.price && product.condition === 'Usado' ? `R$ ${product.price}` : 'Sob Consulta'}
+                        </span>
                         <ArrowRightOutlined />
                       </div>
                     </Card>

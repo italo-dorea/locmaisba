@@ -104,7 +104,7 @@ export function PortfolioClient({ categories }: { categories: [string, Product[]
                              <div className="text-[9px] print:text-[7px] text-gray-400 font-bold uppercase tracking-widest">
                                REF: LOC-{p.id.padStart(3, '0')}
                              </div>
-                             {p.price && (
+                             {p.price && p.condition === 'Usado' && (
                                <div className="text-[#0a4f5c] font-black text-[11px] print:text-[8px] bg-[#ffc300]/20 px-2 print:px-1 flex items-center h-6 print:h-4 rounded uppercase">
                                  R$ {p.price}
                                </div>
