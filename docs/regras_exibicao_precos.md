@@ -11,7 +11,7 @@ Utilize este documento para manter o alinhamento com as expectativas do cliente 
 **Data da Decisão:** Abril / 2026
 **Motivação:** A equipe comercial definiu regras de discrição de mercado para locações e equipamentos novos, priorizando o contato consultivo via WhatsApp para geração de cotação formal, evitando que preços fiquem expostos e possam afastar o locatário sem uma negociação. 
 
-Portanto, o sistema aplica a seguinte conduta automaticamente com base no campo "Condição" e "Tipo de Negócio" dos equipamentos:
+Portanto, o sistema aplica a seguinte conduta automaticamente com base no campo "Condição" e "Tipo de Negócio" dos equipamentos:.
 
 ### A. Equipamentos para Locação
 - **Preço Visualmente Exibido:** Ocultado.
