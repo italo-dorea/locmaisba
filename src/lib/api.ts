@@ -82,16 +82,11 @@ export async function fetchProducts(): Promise<Product[]> {
     const validData = rawData.filter(item => item.nome && item.nome.trim() !== '');
     
     return validData.map(item => {
-      const isDriveImg = item.imagem && item.imagem.includes('drive.google.com/file/d/');
-      // Trying to get thumbnail url from drive link if needed, but we keep original.
-      let imgUrl = item.imagem || 'https://placehold.co/600x400/eeeeee/888888?text=Sem+Imagem';
-      if (isDriveImg) {
-        // optionally convert drive link to direct image link (thumbnail format)
-        const fileId = item.imagem.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1];
-        if (fileId) {
-          imgUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w800`;
-        }
-      }
+      // Usa a URL da imagem diretamente da planilha (HostGator, Supabase, etc.)
+      // Fallback para placeholder se não houver imagem cadastrada
+      const imgUrl = (item.imagem && item.imagem.trim() !== '')
+        ? item.imagem.trim()
+        : 'https://placehold.co/600x400/f1f5f9/64748b?text=Sem+Imagem&font=montserrat';
 
       const categoryName = item.Categoria || 'Outros';
 
