@@ -96,10 +96,39 @@ export function PortfolioClient({ categories }: { categories: [string, Product[]
                        </p>
                        
                        <div className="border-t border-gray-100 mt-auto pt-3 print:pt-1.5">
-                         <ul className="pl-4 m-0 text-[10px] print:text-[7px] text-gray-500 list-disc space-y-1 print:space-y-0.5 mb-3 print:mb-1.5 font-medium print:hidden">
-                           {p.features.slice(0, 2).map((f: string, i: number) => <li key={i} className="line-clamp-1">{f}</li>)}
-                         </ul>
-                         
+                         {/* Badges: tipo de negócio e condição */}
+                         <div className="flex flex-wrap gap-1 mb-3 print:mb-1.5">
+                           {/* Locação */}
+                           {(() => {
+                             const bt = (p.businessType || '').toLowerCase();
+                             const showLocacao = bt === '' || bt.includes('loca');
+                             const showVenda = bt.includes('venda');
+                             return (
+                               <>
+                                 {showLocacao && (
+                                   <span className="text-[9px] print:text-[7px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#0a4f5c]/10 text-[#0a4f5c] border border-[#0a4f5c]/20">
+                                     Locação
+                                   </span>
+                                 )}
+                                 {showVenda && (
+                                   <span className="text-[9px] print:text-[7px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#ffc300]/20 text-[#7a5c00] border border-[#ffc300]/40">
+                                     Venda
+                                   </span>
+                                 )}
+                                 {p.condition && (
+                                   <span className={`text-[9px] print:text-[7px] font-black uppercase tracking-wider px-2 py-0.5 rounded border ${
+                                     p.condition === 'Novo'
+                                       ? 'bg-green-50 text-green-700 border-green-200'
+                                       : 'bg-gray-100 text-gray-600 border-gray-300'
+                                   }`}>
+                                     {p.condition}
+                                   </span>
+                                 )}
+                               </>
+                             );
+                           })()}
+                         </div>
+
                          <div className="mt-3 print:mt-1.5 flex justify-between items-center bg-gray-50 -mx-3 -mb-3 p-3 print:-mx-2 print:-mb-2 print:p-2 rounded-b-lg border-t border-gray-100">
                              <div className="text-[9px] print:text-[7px] text-gray-400 font-bold uppercase tracking-widest">
                                REF: LOC-{p.id.padStart(3, '0')}

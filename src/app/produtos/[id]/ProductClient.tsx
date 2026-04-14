@@ -38,7 +38,7 @@ export function ProductClient({ product }: { product: Product }) {
           <Title level={1} className="!text-3xl !font-bold !text-gray-800 !mb-2">
             {product.name}
           </Title>
-          <Text className="text-gray-500 text-lg block mb-2">{product.shortDescription}</Text>
+          <Text className="text-gray-500 text-lg block mb-2" style={{ textAlign: 'justify', display: 'block' }}>{product.shortDescription}</Text>
           {product.price && product.condition === 'Usado' && (
             <div className="mb-4">
                <Text className="text-3xl font-bold text-locmaisTeal">R$ {product.price}</Text>
@@ -64,7 +64,7 @@ export function ProductClient({ product }: { product: Product }) {
           <Divider />
 
           <Title level={4} className="!text-gray-800 !mb-4">Descrição Geral</Title>
-          <Paragraph className="text-base text-gray-600 mb-8 leading-relaxed">
+          <Paragraph className="text-base text-gray-600 mb-8 leading-relaxed" style={{ textAlign: 'justify' }}>
             {product.fullDescription}
           </Paragraph>
 

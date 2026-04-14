@@ -111,7 +111,7 @@ export const Footer = ({ locacaoCategories = [], vendaNovosCategories = [], vend
                 </div>
                 <div className="flex items-center">
                   <WhatsAppOutlined className="text-xl mr-3 text-locmaisYellow" />
-                  <Text className="text-gray-200">(71) 9256-3118</Text>
+                  <Text className="text-gray-200">(71) 99256-3118</Text>
                 </div>
               </div>
             </Space>
