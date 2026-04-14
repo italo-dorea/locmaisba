@@ -359,6 +359,17 @@ function ProductsTab({
           </Form.Item>
 
           <Form.Item
+            name="seo_keywords"
+            label="Palavras-chave SEO (separadas por vírgula)"
+            extra="Ajuda o Google a encontrar este produto. Ex: compressor de ar, locação compressor Salvador, compressor diesel"
+          >
+            <Input.TextArea
+              rows={2}
+              placeholder="Ex: compressor de ar, locação compressor Salvador BA, compressor diesel 150PCM"
+            />
+          </Form.Item>
+
+          <Form.Item
             name="imageUpload"
             label="Imagem do Produto"
             valuePropName="fileList"

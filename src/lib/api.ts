@@ -21,6 +21,7 @@ export interface Product {
   generalObservations?: string | null;
   businessType?: string | null;
   condition?: string;
+  seoKeywords?: string; // Palavras-chave SEO separadas por vírgula
 }
 
 export interface RawSheetProduct {
@@ -37,6 +38,7 @@ export interface RawSheetProduct {
   imagem: string;
   condicao?: string;
   Condicao?: string;
+  seo_keywords?: string;
 }
 
 function slugify(text: string) {
@@ -125,7 +127,8 @@ export async function fetchProducts(): Promise<Product[]> {
         priceObservation: item.Observacao_preco,
         generalObservations: item.observacoes_gerais,
         businessType: item.tipo_de_negocio,
-        condition
+        condition,
+        seoKeywords: item.seo_keywords || '',
       };
     });
   } catch (error) {
