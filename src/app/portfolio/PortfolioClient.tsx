@@ -4,6 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { Product } from '@/lib/api';
 
+const FALLBACK_IMG = 'https://placehold.co/600x400/f1f5f9/64748b?text=Imagem+Indispon%C3%ADvel&font=montserrat';
+
 export function PortfolioClient({ categories }: { categories: [string, Product[]][] }) {
   return (
     <div className="bg-white min-h-screen">
@@ -83,7 +85,7 @@ export function PortfolioClient({ categories }: { categories: [string, Product[]
 
                        {/* Image container */}
                        <div className="w-full aspect-[4/3] bg-gray-50 rounded flex items-center justify-center p-2 mb-3 print:mb-1.5 border border-gray-100 overflow-hidden shrink-0">
-                         <img src={p.imageUrl} alt={p.name} className="w-full h-full object-contain" />
+                         <img src={p.imageUrl} alt={p.name} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }} />
                        </div>
                        
                        {/* Product Info */}

@@ -9,6 +9,8 @@ import { Product, Category } from '@/lib/api';
 
 const { Title, Paragraph, Text } = Typography;
 
+const FALLBACK_IMG = 'https://placehold.co/600x400/f1f5f9/64748b?text=Imagem+Indispon%C3%ADvel&font=montserrat';
+
 // Helpers de classificação por businessType
 const isLocacao = (p: Product) => {
   const bt = (p.businessType || '').toLowerCase();
@@ -32,6 +34,7 @@ function ProductCard({ product }: { product: Product }) {
               alt={product.name}
               src={product.imageUrl}
               className="object-contain p-2 h-full w-full transition-transform duration-300 hover:scale-105"
+              onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
             />
           </div>
         }

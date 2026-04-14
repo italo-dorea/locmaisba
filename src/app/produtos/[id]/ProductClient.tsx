@@ -6,6 +6,8 @@ import { CheckCircleFilled, FilePdfOutlined, SafetyCertificateOutlined, WhatsApp
 import { Product } from '@/lib/api';
 import Link from 'next/link';
 
+const FALLBACK_IMG = 'https://placehold.co/600x400/f1f5f9/64748b?text=Imagem+Indispon%C3%ADvel&font=montserrat';
+
 const { Title, Paragraph, Text } = Typography;
 
 export function ProductClient({ product }: { product: Product }) {
@@ -22,9 +24,10 @@ export function ProductClient({ product }: { product: Product }) {
         <Col xs={24} md={12}>
           <div className="w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-200 relative aspect-[4/3]">
             <img 
-              src={product.imageUrl} 
-              alt={product.name} 
+              src={product.imageUrl}
+              alt={product.name}
               className="w-full h-full object-contain p-4 bg-white"
+              onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
             />
             <div className="absolute top-4 left-4">
               <Tag color="cyan" className="!bg-white !text-locmaisTeal font-bold px-3 py-1 shadow-sm border-gray-200">
