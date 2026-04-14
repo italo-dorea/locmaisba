@@ -31,7 +31,7 @@ Portanto, o sistema aplica a seguinte conduta automaticamente com base no campo 
 
 ## Arquivos com as Regras Aplicadas
 
-As verificações lógicas no código (Frontend) estão presentes nos arquivos principais de visualização para assegurar essa decisão:
+As verificações lógicas no código (Frontend) estão presentes nos arquivos principais de visualização para assegurar essa decisão :
 
 - `src/app/produtos/[id]/ProductClient.tsx`: Gerencia a tela final individual do produto (oculta as labels textuais de reais - `R$`).
 - `src/app/HomeClient.tsx`: Oculta os preços diretamente nas prateleiras e destaques de promoções.
