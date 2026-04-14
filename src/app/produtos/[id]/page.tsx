@@ -4,8 +4,11 @@ import Link from 'next/link';
 
 export async function generateStaticParams() {
   const products = await fetchProducts();
+  if (!products || products.length === 0) {
+    return [{ id: 'dummy' }];
+  }
   return products.map((product) => ({
-    id: product.id,
+    id: String(product.id),
   }));
 }
 

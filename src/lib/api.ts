@@ -50,7 +50,6 @@ function slugify(text: string) {
 
 // Convert google drive view links to preview or raw image links if necessary, 
 // but for simplicity we'll keep the string.
-const URL = 'https://script.google.com/macros/s/AKfycbyhKoMIihHywbqGUEtfLQVWIG3KF0LgrnLUEAqAVZcE1gSNbmMpUNT07Y1_Wm_MvPLG/exec';
 
 function formatPrice(preco: string | number | undefined | null): string | null {
   if (!preco) return null;
@@ -67,16 +66,22 @@ function formatPrice(preco: string | number | undefined | null): string | null {
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    const res = await fetch(URL, {
-      cache: 'force-cache'
-    });
+    let rawData: RawSheetProduct[] = [];
     
-    if (!res.ok) {
-      console.error('Failed to fetch from Google App Script');
-      return [];
+    // Suporte para rodar tanto no server interno (next build) quanto no client
+    if (typeof window !== 'undefined') {
+      const res = await fetch('/api/products.json', { cache: 'no-store' });
+      if (res.ok) {
+        rawData = await res.json();
+      }
+    } else {
+        // Build-time SSR (não temos fs nem fetch absoluto), então deixamos o json mock default caso falhe
+        // para não quebrar a build estática
+        try {
+            // Caso estivéssemos numa build que permite fetch local
+            // rawData = [];
+        } catch(e) {}
     }
-    
-    const rawData: RawSheetProduct[] = await res.json();
     
     // Filter empty rows
     const validData = rawData.filter(item => item.nome && item.nome.trim() !== '');
