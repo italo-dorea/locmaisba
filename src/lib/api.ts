@@ -25,7 +25,7 @@ export interface Product {
 }
 
 export interface RawSheetProduct {
-  id: number;
+  id: number | string;
   nome: string;
   subdescricao: string;
   descricao: string;
