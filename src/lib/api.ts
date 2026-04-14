@@ -69,22 +69,23 @@ function formatPrice(preco: string | number | undefined | null): string | null {
 export async function fetchProducts(): Promise<Product[]> {
   try {
     let rawData: RawSheetProduct[] = [];
-    
-    // Suporte para rodar tanto no server interno (next build) quanto no client
-    if (typeof window !== 'undefined') {
-      const res = await fetch('/api/products.json', { cache: 'no-store' });
-      if (res.ok) {
-        rawData = await res.json();
+
+    if (typeof window === 'undefined') {
+      // SERVER-SIDE (next build / SSR): lê o arquivo direto do disco
+      // Importação dinâmica para não incluir 'fs' no bundle do cliente
+      const fs = (await import('fs')).default;
+      const path = (await import('path')).default;
+      const filePath = path.join(process.cwd(), 'public', 'api', 'products.json');
+      if (fs.existsSync(filePath)) {
+        const contents = fs.readFileSync(filePath, 'utf8').trim();
+        if (contents) rawData = JSON.parse(contents);
       }
     } else {
-        // Build-time SSR (não temos fs nem fetch absoluto), então deixamos o json mock default caso falhe
-        // para não quebrar a build estática
-        try {
-            // Caso estivéssemos numa build que permite fetch local
-            // rawData = [];
-        } catch(e) {}
+      // CLIENT-SIDE (browser): busca o JSON já servido pelo servidor Apache/PHP
+      const res = await fetch('/api/products.json', { cache: 'no-store' });
+      if (res.ok) rawData = await res.json();
     }
-    
+
     // Filter empty rows
     const validData = rawData.filter(item => item.nome && item.nome.trim() !== '');
     
