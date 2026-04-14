@@ -1,0 +1,17 @@
+[
+  { "id": "equipamentos-eletricos", "name": "Equipamentos Elétricos" },
+  { "id": "bombas", "name": "Bombas" },
+  { "id": "movimentacao-terra", "name": "Movimentação Terra" },
+  { "id": "compressores", "name": "Compressores" },
+  { "id": "equipamentos-de-corte", "name": "Equipamentos de Corte" },
+  { "id": "escoramento-metalico", "name": "Escoramento Metálico" },
+  { "id": "equipamentos-pneumaticos", "name": "Equipamentos Pneumáticos" },
+  { "id": "equipamentos-de-medicao", "name": "Equipamentos de Medição" },
+  { "id": "furadeiras", "name": "Furadeiras" },
+  { "id": "geradores-e-motores", "name": "Geradores e Motores" },
+  { "id": "equipamentos-de-solda", "name": "Equipamentos de Solda" },
+  { "id": "maquinas-pesadas", "name": "Máquinas Pesadas" },
+  { "id": "elevacao-de-carga", "name": "Elevação de Carga" },
+  { "id": "ferramentas-manuais", "name": "Ferramentas Manuais" },
+  { "id": "veiculos", "name": "Veículos" }
+]
