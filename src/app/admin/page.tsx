@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import {
   UploadOutlined, PlusOutlined, EditOutlined,
-  DeleteOutlined, AppstoreOutlined, TagsOutlined
+  DeleteOutlined, AppstoreOutlined, TagsOutlined, CloudSyncOutlined
 } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -172,7 +172,25 @@ function ProductsTab({
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [deploying, setDeploying] = useState(false);
   const [form] = Form.useForm();
+
+  const triggerSiteUpdate = async () => {
+    setDeploying(true);
+    try {
+      const res = await fetch('/api/deploy', { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        message.success('✅ Deploy iniciado! O site será atualizado em alguns minutos.');
+      } else {
+        message.error(`❌ Erro: ${data.error || res.status}`);
+      }
+    } catch (e: any) {
+      message.error('❌ Erro crítico: ' + e.message);
+    } finally {
+      setDeploying(false);
+    }
+  };
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -287,9 +305,19 @@ function ProductsTab({
     <>
       <div className="flex justify-between items-center mb-4">
         <span className="text-gray-500 text-sm">{products.filter(p => p.nome).length} produtos cadastrados</span>
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal()} style={{ background: '#127184' }}>
-          Novo Produto
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            icon={<CloudSyncOutlined />}
+            loading={deploying}
+            onClick={triggerSiteUpdate}
+            style={{ borderColor: '#127184', color: '#127184' }}
+          >
+            Atualizar Produtos no Site
+          </Button>
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal()} style={{ background: '#127184' }}>
+            Novo Produto
+          </Button>
+        </div>
       </div>
 
       <Table columns={columns} dataSource={products.filter(p => p.nome)} rowKey="id" loading={loading} size="middle" scroll={{ x: 600 }} />

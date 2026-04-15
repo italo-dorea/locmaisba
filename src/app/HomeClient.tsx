@@ -171,7 +171,7 @@ export default function HomeClient({
                       hoverable
                       className="text-center h-full border-gray-200 hover:border-locmaisTeal transition-all shadow-sm hover:shadow-md flex items-center justify-center p-4 min-h-[100px]"
                     >
-                      <Title level={5} className="!mb-0 text-gray-800 text-wrap break-words leading-tight">
+                      <Title level={5} className="!mb-0 text-gray-800 leading-tight" style={{ wordBreak: 'normal', overflowWrap: 'break-word', hyphens: 'none' }}>
                         {cat.name}
                       </Title>
                     </Card>

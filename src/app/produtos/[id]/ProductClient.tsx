@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Typography, Row, Col, Button, Tag, Divider, Breadcrumb } from 'antd';
+import { Typography, Row, Col, Button, Divider, Breadcrumb } from 'antd';
 import { CheckCircleFilled, FilePdfOutlined, SafetyCertificateOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { Product } from '@/lib/api';
 import Link from 'next/link';
@@ -29,10 +29,26 @@ export function ProductClient({ product }: { product: Product }) {
               className="w-full h-full object-contain p-4 bg-white"
               onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
             />
-            <div className="absolute top-4 left-4">
-              <Tag color="cyan" className="!bg-white !text-locmaisTeal font-bold px-3 py-1 shadow-sm border-gray-200">
-                {product.brand}
-              </Tag>
+            <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+              {(() => {
+                const bt = (product.businessType || '').toLowerCase();
+                const showLocacao = bt === '' || bt.includes('loca');
+                const showVenda = bt.includes('venda');
+                return (
+                  <>
+                    {showLocacao && (
+                      <span className="text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#0a4f5c] text-white shadow-sm">
+                        Locação
+                      </span>
+                    )}
+                    {showVenda && (
+                      <span className="text-xs font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-[#ffc300] text-[#0a4f5c] shadow-sm">
+                        Venda
+                      </span>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
         </Col>
