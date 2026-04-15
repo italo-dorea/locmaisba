@@ -19,10 +19,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Mesma versão do seu ambiente local ou superior
+          node-version: '20'
 
       - name: Install dependencies
-        run: npm ci # Usa npm ci para instabilidades mais seguras usando package-lock.json
+        run: npm ci
+
+      # Baixa o products.json e categories.json mais recentes da HostGator
+      # para que o build use os dados atualizados pelo admin
+      - name: Fetch live data from HostGator
+        run: |
+          curl -sf "${{ secrets.SITE_URL }}/api/products.json" -o public/api/products.json || echo "⚠️ Falha ao baixar products.json, usando versão do repo"
+          curl -sf "${{ secrets.SITE_URL }}/api/categories.json" -o public/api/categories.json || echo "⚠️ Falha ao baixar categories.json, usando versão do repo"
 
       - name: Build Next.js
         run: npm run build
@@ -35,5 +42,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./out/ # Pasta onde o Next.js gera o site estático
+          local-dir: ./out/
           server-dir: ./
+          exclude: |
+            imagens/upload/**
