@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Tabs, Table, Button, Modal, Form, Input, Select, Upload,
-  message, Card, Space, Popconfirm, Tag, Typography, Drawer, Image, Empty, Spin
+  message, Card, Space, Popconfirm, Tag, Typography, Drawer, Image, Empty, Spin, Tooltip
 } from 'antd';
 import {
   UploadOutlined, PlusOutlined, EditOutlined,
@@ -174,7 +174,35 @@ function ProductsTab({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [deploying, setDeploying] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [form] = Form.useForm();
+
+  // Limpa timer ao desmontar
+  useEffect(() => {
+    return () => { if (cooldownRef.current) clearInterval(cooldownRef.current); };
+  }, []);
+
+  const startCooldown = () => {
+    const COOLDOWN_SECONDS = 180; // 3 minutos
+    setCooldown(COOLDOWN_SECONDS);
+    if (cooldownRef.current) clearInterval(cooldownRef.current);
+    cooldownRef.current = setInterval(() => {
+      setCooldown(prev => {
+        if (prev <= 1) {
+          if (cooldownRef.current) clearInterval(cooldownRef.current);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const formatCooldown = (s: number) => {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${m}:${sec.toString().padStart(2, '0')}`;
+  };
 
   // ── Gallery state ──
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -232,6 +260,7 @@ function ProductsTab({
       });
       if (res.status === 204) {
         message.success('✅ Deploy iniciado! O site será atualizado em alguns minutos.');
+        startCooldown();
       } else {
         message.error(`❌ Erro ${res.status}: verifique o token GitHub.`);
       }
@@ -356,14 +385,25 @@ function ProductsTab({
       <div className="flex justify-between items-center mb-4">
         <span className="text-gray-500 text-sm">{products.filter(p => p.nome).length} produtos cadastrados</span>
         <div className="flex gap-2">
-          <Button
-            icon={<CloudSyncOutlined />}
-            loading={deploying}
-            onClick={triggerSiteUpdate}
-            style={{ borderColor: '#127184', color: '#127184' }}
+          <Tooltip
+            title={cooldown > 0 ? `Próxima atualização disponível em ${formatCooldown(cooldown)}` : 'Dispara o rebuild e deploy do site'}
           >
-            Atualizar Produtos no Site
-          </Button>
+            <Button
+              icon={<CloudSyncOutlined />}
+              loading={deploying}
+              disabled={cooldown > 0}
+              onClick={triggerSiteUpdate}
+              style={cooldown > 0
+                ? { borderColor: '#d9d9d9', color: '#999' }
+                : { borderColor: '#127184', color: '#127184' }
+              }
+            >
+              {cooldown > 0
+                ? `Aguarde ${formatCooldown(cooldown)}`
+                : 'Atualizar Produtos no Site'
+              }
+            </Button>
+          </Tooltip>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal()} style={{ background: '#127184' }}>
             Novo Produto
           </Button>
