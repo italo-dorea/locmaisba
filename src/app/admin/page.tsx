@@ -3,11 +3,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Tabs, Table, Button, Modal, Form, Input, Select, Upload,
-  message, Card, Space, Popconfirm, Tag, Typography
+  message, Card, Space, Popconfirm, Tag, Typography, Drawer, Image, Empty, Spin
 } from 'antd';
 import {
   UploadOutlined, PlusOutlined, EditOutlined,
-  DeleteOutlined, AppstoreOutlined, TagsOutlined, CloudSyncOutlined
+  DeleteOutlined, AppstoreOutlined, TagsOutlined, CloudSyncOutlined,
+  PictureOutlined, CheckCircleFilled
 } from '@ant-design/icons';
 
 const { Title } = Typography;
@@ -174,6 +175,46 @@ function ProductsTab({
   const [editing, setEditing] = useState<any>(null);
   const [deploying, setDeploying] = useState(false);
   const [form] = Form.useForm();
+
+  // ── Gallery state ──
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<{name: string; url: string}[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(false);
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState<string | null>(null);
+
+  const fetchGalleryImages = async () => {
+    setGalleryLoading(true);
+    try {
+      const res = await fetch('/api/images.php', { cache: 'no-store' });
+      if (res.ok) setGalleryImages(await res.json());
+    } catch { message.error('Erro ao carregar galeria.'); }
+    finally { setGalleryLoading(false); }
+  };
+
+  const openGallery = () => {
+    const currentImg = form.getFieldValue('imageUpload');
+    if (currentImg && currentImg.length > 0) {
+      setSelectedGalleryImage(currentImg[0]?.url || currentImg[0]?.response?.url || null);
+    } else {
+      setSelectedGalleryImage(null);
+    }
+    setGalleryOpen(true);
+    fetchGalleryImages();
+  };
+
+  const selectGalleryImage = (url: string) => {
+    setSelectedGalleryImage(url);
+  };
+
+  const confirmGallerySelection = () => {
+    if (selectedGalleryImage) {
+      form.setFieldsValue({
+        imageUpload: [{ uid: '-gallery', name: selectedGalleryImage.split('/').pop(), status: 'done', url: selectedGalleryImage }],
+      });
+      setGalleryOpen(false);
+      message.success('Imagem selecionada!');
+    }
+  };
 
   const triggerSiteUpdate = async () => {
     setDeploying(true);
@@ -419,6 +460,69 @@ function ProductsTab({
               </div>
             </Upload>
           </Form.Item>
+
+          <Button
+            icon={<PictureOutlined />}
+            onClick={openGallery}
+            className="mb-6"
+            style={{ borderColor: '#127184', color: '#127184' }}
+          >
+            Escolher da Galeria
+          </Button>
+
+          {/* ── Drawer de Galeria ── */}
+          <Drawer
+            title="Galeria de Imagens"
+            open={galleryOpen}
+            onClose={() => setGalleryOpen(false)}
+            width={520}
+            footer={
+              <div className="flex justify-end gap-2">
+                <Button onClick={() => setGalleryOpen(false)}>Cancelar</Button>
+                <Button
+                  type="primary"
+                  disabled={!selectedGalleryImage}
+                  onClick={confirmGallerySelection}
+                  style={{ background: '#127184' }}
+                >
+                  Usar Imagem Selecionada
+                </Button>
+              </div>
+            }
+          >
+            {galleryLoading ? (
+              <div className="flex justify-center py-12"><Spin size="large" /></div>
+            ) : galleryImages.length === 0 ? (
+              <Empty description="Nenhuma imagem encontrada no servidor." />
+            ) : (
+              <div className="grid grid-cols-3 gap-3">
+                {galleryImages.map((img) => (
+                  <div
+                    key={img.url}
+                    onClick={() => selectGalleryImage(img.url)}
+                    className={`relative cursor-pointer rounded-lg overflow-hidden border-2 transition-all hover:shadow-md ${
+                      selectedGalleryImage === img.url
+                        ? 'border-[#127184] shadow-md'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.name}
+                      className="w-full h-24 object-cover"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    />
+                    {selectedGalleryImage === img.url && (
+                      <div className="absolute top-1 right-1 bg-[#127184] text-white rounded-full w-5 h-5 flex items-center justify-center">
+                        <CheckCircleFilled className="text-xs" />
+                      </div>
+                    )}
+                    <div className="px-1 py-0.5 text-[10px] text-gray-500 truncate">{img.name}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Drawer>
 
           <div className="flex justify-end gap-2 mt-2">
             <Button onClick={() => setIsModalOpen(false)}>Cancelar</Button>

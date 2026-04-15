@@ -80,7 +80,7 @@ elseif ($method === 'PUT') {
     
     $found = false;
     foreach ($products as $key => $product) {
-        if ($product['id'] === $id) {
+        if ((string)$product['id'] === (string)$id) {
             $products[$key] = array_merge($product, $input);
             $found = true;
             $input = $products[$key];
@@ -108,7 +108,7 @@ elseif ($method === 'DELETE') {
     
     $initialCount = count($products);
     $products = array_filter($products, function($p) use ($id) {
-        return $p['id'] !== $id;
+        return (string)$p['id'] !== (string)$id;
     });
     
     $products = array_values($products); // Re-index array
