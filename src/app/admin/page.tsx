@@ -177,13 +177,26 @@ function ProductsTab({
 
   const triggerSiteUpdate = async () => {
     setDeploying(true);
+    const token = process.env.NEXT_PUBLIC_GITHUB_DEPLOY_TOKEN;
+    if (!token) {
+      message.error('❌ Token não configurado. Contate o administrador.');
+      setDeploying(false);
+      return;
+    }
     try {
-      const res = await fetch('/api/deploy', { method: 'POST' });
-      const data = await res.json();
-      if (res.ok) {
+      const res = await fetch('https://api.github.com/repos/italo-dorea/locmaisba/dispatches', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ event_type: 'update-sheets' }),
+      });
+      if (res.status === 204) {
         message.success('✅ Deploy iniciado! O site será atualizado em alguns minutos.');
       } else {
-        message.error(`❌ Erro: ${data.error || res.status}`);
+        message.error(`❌ Erro ${res.status}: verifique o token GitHub.`);
       }
     } catch (e: any) {
       message.error('❌ Erro crítico: ' + e.message);
