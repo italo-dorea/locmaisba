@@ -13,3 +13,40 @@ body {
   background: rgb(var(--background-start-rgb));
   min-height: 100vh;
 }
+
+/* ── Product Accordion ─────────────────────────────────────────────── */
+.product-accordion .ant-collapse-item {
+  border-bottom: 1px solid #e5e7eb !important;
+  border-radius: 0 !important;
+}
+
+.product-accordion .ant-collapse-item:last-child {
+  border-bottom: none !important;
+}
+
+.product-accordion .ant-collapse-header {
+  padding: 20px 8px !important;
+  border-radius: 0 !important;
+  transition: background-color 0.2s ease;
+}
+
+.product-accordion .ant-collapse-header:hover {
+  background-color: #f8fafb !important;
+}
+
+.product-accordion .ant-collapse-item-active > .ant-collapse-header {
+  background-color: #f0fdfa !important;
+}
+
+.product-accordion .ant-collapse-content {
+  border-top: none !important;
+}
+
+.product-accordion .ant-collapse-content-box {
+  padding: 8px 8px 24px !important;
+}
+
+.product-accordion .ant-collapse-expand-icon {
+  color: #127184 !important;
+  font-size: 16px;
+}

@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Typography, Card, Col, Row, Button, Tag, Empty, Divider } from 'antd';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Typography, Card, Col, Row, Button, Tag, Empty, Collapse } from 'antd';
+import { ArrowRightOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Product, Category } from '@/lib/api';
@@ -10,6 +10,7 @@ import { Product, Category } from '@/lib/api';
 const { Title, Paragraph, Text } = Typography;
 
 const FALLBACK_IMG = 'https://placehold.co/600x400/f1f5f9/64748b?text=Imagem+Indispon%C3%ADvel&font=montserrat';
+const PRODUCTS_LIMIT = 6;
 
 // Helpers de classificação por businessType
 const isLocacao = (p: Product) => {
@@ -62,34 +63,61 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-// Seção genérica de produtos com título e grid
-function ProductSection({
-  title,
-  accentColor,
-  products,
-  badge,
-}: {
-  title: string;
-  accentColor: string;
-  products: Product[];
-  badge?: React.ReactNode;
-}) {
-  if (products.length === 0) return null;
+// Grid de produtos com limite e "Ver mais"
+function ProductGrid({ products }: { products: Product[] }) {
+  const [showAll, setShowAll] = useState(false);
+  const displayedProducts = showAll ? products : products.slice(0, PRODUCTS_LIMIT);
+  const hasMore = products.length > PRODUCTS_LIMIT;
+  const remaining = products.length - PRODUCTS_LIMIT;
 
   return (
-    <div className="mb-16">
-      <div className="flex items-center gap-3 mb-8 border-b pb-4">
-        <div className={`w-1 h-8 rounded-full ${accentColor}`} />
-        <Title level={2} className="!mb-0 !text-gray-800">{title}</Title>
-        {badge}
-      </div>
+    <div>
       <Row gutter={[24, 32]}>
-        {products.map(product => (
-          <Col xs={24} sm={12} md={8} lg={6} key={`${product.id}-${title}`}>
+        {displayedProducts.map(product => (
+          <Col xs={24} sm={12} md={8} lg={8} key={product.id}>
             <ProductCard product={product} />
           </Col>
         ))}
       </Row>
+
+      {hasMore && (
+        <div className="text-center mt-8">
+          <Button
+            type="default"
+            onClick={() => setShowAll(!showAll)}
+            className="!text-locmaisTeal !border-locmaisTeal hover:!bg-teal-50 font-semibold text-base h-10 px-8 rounded-full"
+            icon={showAll ? <UpOutlined /> : <DownOutlined />}
+          >
+            {showAll ? 'Ver menos' : `Ver mais ${remaining} produto${remaining > 1 ? 's' : ''}`}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Label customizado do accordion
+function AccordionLabel({
+  title,
+  accentColor,
+  count,
+  badge,
+}: {
+  title: string;
+  accentColor: string;
+  count: number;
+  badge?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center gap-3 py-1">
+      <div className={`w-1.5 h-8 rounded-full ${accentColor}`} />
+      <Title level={3} className="!mb-0 !text-gray-800 !text-lg md:!text-xl">
+        {title}
+      </Title>
+      {badge}
+      <Tag className="!ml-auto !bg-gray-100 !text-gray-600 !border-none font-medium !rounded-full">
+        {count} {count === 1 ? 'produto' : 'produtos'}
+      </Tag>
     </div>
   );
 }
@@ -112,9 +140,51 @@ export default function HomeClient({
     : null;
 
   // ── Modo: home sem filtro – separar por business type ────────────────────
-  const locacaoProducts   = initialProducts.filter(isLocacao);
+  const locacaoProducts    = initialProducts.filter(isLocacao);
   const vendaNovosProducts = initialProducts.filter(p => isVenda(p) && p.condition === 'Novo');
   const vendaUsadosProducts = initialProducts.filter(p => isVenda(p) && p.condition === 'Usado');
+
+  // Montar itens do accordion dinamicamente (só exibe seções com produtos)
+  const accordionItems = [
+    locacaoProducts.length > 0 && {
+      key: 'locacao',
+      label: (
+        <AccordionLabel
+          title="Equipamentos para Locação"
+          accentColor="bg-locmaisTeal"
+          count={locacaoProducts.length}
+        />
+      ),
+      children: <ProductGrid products={locacaoProducts} />,
+    },
+    vendaNovosProducts.length > 0 && {
+      key: 'venda-novos',
+      label: (
+        <AccordionLabel
+          title="Equipamentos à Venda — Novos"
+          accentColor="bg-locmaisYellow"
+          count={vendaNovosProducts.length}
+          badge={<Tag color="gold" className="font-bold !text-xs">NOVO</Tag>}
+        />
+      ),
+      children: <ProductGrid products={vendaNovosProducts} />,
+    },
+    vendaUsadosProducts.length > 0 && {
+      key: 'venda-usados',
+      label: (
+        <AccordionLabel
+          title="Equipamentos à Venda — Usados"
+          accentColor="bg-gray-400"
+          count={vendaUsadosProducts.length}
+          badge={<Tag color="default" className="font-bold !text-xs">USADO</Tag>}
+        />
+      ),
+      children: <ProductGrid products={vendaUsadosProducts} />,
+    },
+  ].filter(Boolean) as { key: string; label: React.ReactNode; children: React.ReactNode }[];
+
+  // Primeiro item aberto por padrão
+  const defaultActiveKey = accordionItems.length > 0 ? [accordionItems[0].key] : [];
 
   return (
     <div className="flex flex-col w-full pb-16">
@@ -215,37 +285,15 @@ export default function HomeClient({
           </div>
         )}
 
-        {/* ── Modo: home sem filtro – seções por tipo de negócio ── */}
-        {!categoriaParam && (
-          <>
-            <ProductSection
-              title="Equipamentos para Locação"
-              accentColor="bg-locmaisTeal"
-              products={locacaoProducts}
-            />
-
-            {(vendaNovosProducts.length > 0 || vendaUsadosProducts.length > 0) && (
-              <Divider className="!my-8 border-gray-200" />
-            )}
-
-            <ProductSection
-              title="Equipamentos à Venda — Novos"
-              accentColor="bg-locmaisYellow"
-              products={vendaNovosProducts}
-              badge={
-                <Tag color="gold" className="font-bold">NOVO</Tag>
-              }
-            />
-
-            <ProductSection
-              title="Equipamentos à Venda — Usados"
-              accentColor="bg-gray-400"
-              products={vendaUsadosProducts}
-              badge={
-                <Tag color="default" className="font-bold">USADO</Tag>
-              }
-            />
-          </>
+        {/* ── Modo: home sem filtro – Accordion por tipo de negócio ── */}
+        {!categoriaParam && accordionItems.length > 0 && (
+          <Collapse
+            accordion
+            defaultActiveKey={defaultActiveKey}
+            expandIconPosition="end"
+            className="product-accordion !bg-transparent !border-none"
+            items={accordionItems}
+          />
         )}
       </div>
     </div>
