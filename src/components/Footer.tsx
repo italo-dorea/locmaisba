@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Row, Col, Typography, Space, Divider } from 'antd';
-import { PhoneOutlined, MailOutlined, EnvironmentOutlined, WhatsAppOutlined } from '@ant-design/icons';
+import { PhoneOutlined, MailOutlined, EnvironmentOutlined, WhatsAppOutlined, InstagramOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -41,7 +41,11 @@ export const Footer = ({ locacaoCategories = [], vendaNovosCategories = [], vend
               Locação de equipamentos de pequeno e grande porte para sua obra. Reduza os custos e aumente a produtividade.
             </Text>
             <Space size="middle" direction="vertical" className="mt-2">
-              <Space className="flex items-center gap-2 mt-2">
+              <Link href="https://www.instagram.com/locmais.bahia" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white hover:text-locmaisYellow transition-colors">
+                <InstagramOutlined className="text-xl" />
+                <Text className="text-white hover:text-locmaisYellow transition-colors">@locmais.bahia</Text>
+              </Link>
+              <Space className="flex items-center gap-2">
                 <Link href="mailto:comercial@locmaisba.com.br" className="text-white text-xl hover:text-locmaisYellow transition-colors"><MailOutlined /></Link>
                 <Text className="text-white">comercial@locmaisba.com.br</Text>
               </Space>

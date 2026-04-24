@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Layout, Input, Button, Dropdown, Space, Typography, MenuProps, AutoComplete, Drawer, Collapse, CollapseProps } from 'antd';
-import { SearchOutlined, PhoneOutlined, MailOutlined, DownOutlined, ArrowRightOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import { SearchOutlined, PhoneOutlined, MailOutlined, DownOutlined, ArrowRightOutlined, MenuOutlined, CloseOutlined, InstagramOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
@@ -301,6 +301,9 @@ export const Header = ({
           <p className="text-sm text-gray-600 mb-1"><PhoneOutlined className="mr-2 text-locmaisTeal" /> (71) 3625-6693</p>
           <p className="text-sm text-gray-600 mb-1"><PhoneOutlined className="mr-2 text-locmaisTeal" /> (71) 99945-4369</p>
           <p className="text-sm text-gray-600 mb-1"><PhoneOutlined className="mr-2 text-locmaisTeal" /> (71) 99256-3118</p>
+          <Link href="https://www.instagram.com/locmais.bahia" target="_blank" rel="noopener noreferrer" className="flex items-center text-sm text-gray-600 mb-1 hover:text-locmaisTeal transition-colors" onClick={() => setMobileOpen(false)}>
+            <InstagramOutlined className="mr-2 text-locmaisTeal" /> @locmais.bahia
+          </Link>
           <p className="text-sm text-gray-600"><MailOutlined className="mr-2 text-locmaisTeal" /> comercial@locmaisba.com.br</p>
         </div>
       </Drawer>
