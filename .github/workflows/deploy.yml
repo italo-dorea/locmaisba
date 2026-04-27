@@ -44,5 +44,6 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./out/
           server-dir: ./
+          timeout: 600000 # 10 minutes timeout to prevent control socket drop on HostGator
           exclude: |
             imagens/upload/**
