@@ -16,6 +16,6 @@
   RewriteCond %{DOCUMENT_ROOT}/$1.html -f
   RewriteRule ^(.*)$ $1.html [L]
 
-  # Envia Erro 404 personalizado do Next.js
+  # Envia Erro 404 personalizado do Next.js.
   ErrorDocument 404 /404.html
 </IfModule>
