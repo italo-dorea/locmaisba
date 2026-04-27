@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Tabs, Table, Button, Modal, Form, Input, Select, Upload,
-  message, Card, Space, Popconfirm, Tag, Typography, Drawer, Image, Empty, Spin, Tooltip
+  message, Card, Space, Popconfirm, Tag, Typography, Drawer, Spin, Empty, Tooltip, Badge
 } from 'antd';
 import {
   UploadOutlined, PlusOutlined, EditOutlined,
@@ -58,23 +58,18 @@ function LoginScreen({ onLogin }: { onLogin: (user: string, pass: string) => voi
 }
 
 // ─── Categories CRUD Tab ────────────────────────────────────────────────────
-function CategoriesTab({ authHeaders }: { authHeaders: Record<string, string> }) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(false);
+function CategoriesTab({ 
+  categories, 
+  setCategories,
+  setPendingChanges 
+}: { 
+  categories: Category[];
+  setCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  setPendingChanges: (v: boolean) => void;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
   const [form] = Form.useForm();
-
-  const fetchCategories = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/categories.json', { cache: 'no-store' });
-      if (res.ok) setCategories(await res.json());
-    } catch { message.error('Erro ao buscar categorias.'); }
-    finally { setLoading(false); }
-  }, []);
-
-  useEffect(() => { fetchCategories(); }, [fetchCategories]);
 
   const openModal = (cat?: Category) => {
     setEditing(cat || null);
@@ -83,30 +78,22 @@ function CategoriesTab({ authHeaders }: { authHeaders: Record<string, string> })
   };
 
   const handleSave = async (values: any) => {
-    const url = editing ? `/api/categories.php?id=${editing.id}` : '/api/categories.php';
-    const method = editing ? 'PUT' : 'POST';
-    const body = editing ? { id: editing.id, name: values.name } : { name: values.name };
-
-    try {
-      const res = await fetch(url, { method, headers: { ...authHeaders, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      const data = await res.json();
-      if (res.ok) {
-        message.success(editing ? 'Categoria atualizada!' : 'Categoria criada!');
-        setIsModalOpen(false);
-        fetchCategories();
-      } else {
-        message.error(data.error || 'Erro ao salvar.');
-      }
-    } catch { message.error('Erro de conexão.'); }
+    if (editing) {
+      setCategories(cats => cats.map(c => c.id === editing.id ? { ...c, name: values.name } : c));
+      message.success('Categoria atualizada localmente!');
+    } else {
+      const newId = values.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-');
+      setCategories(cats => [...cats, { id: newId, name: values.name }]);
+      message.success('Categoria criada localmente!');
+    }
+    setPendingChanges(true);
+    setIsModalOpen(false);
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await fetch(`/api/categories.php?id=${id}`, { method: 'DELETE', headers: authHeaders });
-      const data = await res.json();
-      if (res.ok) { message.success('Categoria excluída.'); fetchCategories(); }
-      else message.error(data.error || 'Erro ao excluir.');
-    } catch { message.error('Erro de conexão.'); }
+  const handleDelete = (id: string) => {
+    setCategories(cats => cats.filter(c => c.id !== id));
+    setPendingChanges(true);
+    message.success('Categoria excluída localmente.');
   };
 
   const columns = [
@@ -128,13 +115,13 @@ function CategoriesTab({ authHeaders }: { authHeaders: Record<string, string> })
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <span className="text-gray-500 text-sm">{categories.length} categorias cadastradas</span>
+        <span className="text-gray-500 text-sm">{categories.length} categorias em memória</span>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal()} style={{ background: '#127184' }}>
           Nova Categoria
         </Button>
       </div>
 
-      <Table columns={columns} dataSource={categories} rowKey="id" loading={loading} size="middle" />
+      <Table columns={columns} dataSource={categories} rowKey="id" size="middle" />
 
       <Modal
         title={editing ? 'Editar Categoria' : 'Nova Categoria'}
@@ -153,7 +140,7 @@ function CategoriesTab({ authHeaders }: { authHeaders: Record<string, string> })
           )}
           <div className="flex justify-end gap-2">
             <Button onClick={() => setIsModalOpen(false)}>Cancelar</Button>
-            <Button type="primary" htmlType="submit" style={{ background: '#127184' }}>Salvar</Button>
+            <Button type="primary" htmlType="submit" style={{ background: '#127184' }}>Salvar na Memória</Button>
           </div>
         </Form>
       </Modal>
@@ -163,46 +150,21 @@ function CategoriesTab({ authHeaders }: { authHeaders: Record<string, string> })
 
 // ─── Products CRUD Tab ──────────────────────────────────────────────────────
 function ProductsTab({
-  authHeaders,
+  products,
+  setProducts,
   categories,
+  setPendingChanges,
+  setPendingImages
 }: {
-  authHeaders: Record<string, string>;
+  products: any[];
+  setProducts: React.Dispatch<React.SetStateAction<any[]>>;
   categories: Category[];
+  setPendingChanges: (v: boolean) => void;
+  setPendingImages: React.Dispatch<React.SetStateAction<any[]>>;
 }) {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
-  const [deploying, setDeploying] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
-  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [form] = Form.useForm();
-
-  // Limpa timer ao desmontar
-  useEffect(() => {
-    return () => { if (cooldownRef.current) clearInterval(cooldownRef.current); };
-  }, []);
-
-  const startCooldown = () => {
-    const COOLDOWN_SECONDS = 180; // 3 minutos
-    setCooldown(COOLDOWN_SECONDS);
-    if (cooldownRef.current) clearInterval(cooldownRef.current);
-    cooldownRef.current = setInterval(() => {
-      setCooldown(prev => {
-        if (prev <= 1) {
-          if (cooldownRef.current) clearInterval(cooldownRef.current);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const formatCooldown = (s: number) => {
-    const m = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${m}:${sec.toString().padStart(2, '0')}`;
-  };
 
   // ── Gallery state ──
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -213,7 +175,7 @@ function ProductsTab({
   const fetchGalleryImages = async () => {
     setGalleryLoading(true);
     try {
-      const res = await fetch('/api/images.php', { cache: 'no-store' });
+      const res = await fetch('/api/images');
       if (res.ok) setGalleryImages(await res.json());
     } catch { message.error('Erro ao carregar galeria.'); }
     finally { setGalleryLoading(false); }
@@ -240,48 +202,9 @@ function ProductsTab({
         imageUpload: [{ uid: '-gallery', name: selectedGalleryImage.split('/').pop(), status: 'done', url: selectedGalleryImage }],
       });
       setGalleryOpen(false);
-      message.success('Imagem selecionada!');
+      message.success('Imagem selecionada da galeria!');
     }
   };
-
-  const triggerSiteUpdate = async () => {
-    setDeploying(true);
-    // token dividido para evitar scanner de segurança do git
-    const tk = ['ghp_O8xzhscDs', 'bZrDboyxUPb4', 'gkq8ZR7p91EaOOg'].join('');
-    try {
-      const res = await fetch('https://api.github.com/repos/italo-dorea/locmaisba/dispatches', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${tk}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ event_type: 'update-sheets' }),
-      });
-      if (res.status === 204) {
-        message.success('✅ Deploy iniciado! O site será atualizado em alguns minutos.');
-        startCooldown();
-      } else {
-        message.error(`❌ Erro ${res.status}: verifique o token GitHub.`);
-      }
-    } catch (e: any) {
-      message.error('❌ Erro crítico: ' + e.message);
-    } finally {
-      setDeploying(false);
-    }
-  };
-
-  const fetchProducts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/products.json', { cache: 'no-store' });
-      if (res.ok) setProducts(await res.json());
-      else setProducts([]);
-    } catch { message.error('Erro ao buscar produtos.'); }
-    finally { setLoading(false); }
-  }, []);
-
-  useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
   const openModal = (record?: any) => {
     setEditing(record || null);
@@ -296,62 +219,54 @@ function ProductsTab({
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await fetch(`/api/admin.php?id=${id}`, { method: 'DELETE', headers: authHeaders });
-      const data = await res.json();
-      if (res.ok) { message.success('Produto excluído.'); fetchProducts(); }
-      else message.error(data.error || 'Erro ao excluir.');
-    } catch { message.error('Erro de conexão.'); }
+  const handleDelete = (id: string | number) => {
+    setProducts(prods => prods.filter(p => p.id !== id));
+    setPendingChanges(true);
+    message.success('Produto excluído localmente.');
   };
 
   const customUpload = async (options: any) => {
     const { onSuccess, onError, file } = options;
-    const formData = new FormData();
-    formData.append('image', file);
-    try {
-      const res = await fetch('/api/upload.php', {
-        method: 'POST',
-        headers: { 'X-Admin-User': authHeaders['X-Admin-User'], 'X-Admin-Pass': authHeaders['X-Admin-Pass'] },
-        body: formData,
-      });
-      if (res.ok) { onSuccess(await res.json()); }
-      else { const err = await res.json(); onError(new Error(err.error)); message.error(err.error); }
-    } catch (err) { onError(err); }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+      const previewUrl = URL.createObjectURL(file); // Preview local
+      
+      setPendingImages(prev => [...prev, { name: file.name, base64 }]);
+      setPendingChanges(true);
+      
+      // Simula o sucesso com a URL futura da imagem no site
+      onSuccess({ url: `/imagens/produtos/${file.name}`, name: file.name, preview: previewUrl });
+    };
+    reader.onerror = () => {
+      onError(new Error('Erro ao ler a imagem'));
+    };
+    reader.readAsDataURL(file);
   };
 
-  const handleSave = async (values: any) => {
-    // Resolve image URL
+  const handleSave = (values: any) => {
     let imageUrl = '';
     const uploadField = values.imageUpload;
     if (uploadField && uploadField.length > 0) {
       const f = uploadField[0];
-      imageUrl = f.response?.url || f.url || '';
+      imageUrl = f.response?.url || f.url || f.preview || '';
     }
 
     const payload: any = { ...values, imagem: imageUrl };
     delete payload.imageUpload;
 
-    if (editing) payload.id = editing.id;
-
-    const url = editing ? `/api/admin.php?id=${editing.id}` : '/api/admin.php';
-    const method = editing ? 'PUT' : 'POST';
-
-    try {
-      const res = await fetch(url, {
-        method,
-        headers: { ...authHeaders, 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        message.success(editing ? 'Produto atualizado!' : 'Produto cadastrado!');
-        setIsModalOpen(false);
-        fetchProducts();
-      } else {
-        message.error(data.error || 'Erro ao salvar.');
-      }
-    } catch { message.error('Erro de conexão.'); }
+    if (editing) {
+      payload.id = editing.id;
+      setProducts(prods => prods.map(p => p.id === editing.id ? payload : p));
+      message.success('Produto atualizado localmente!');
+    } else {
+      payload.id = Date.now(); // ID provisório gerado em memória
+      setProducts(prods => [...prods, payload]);
+      message.success('Produto adicionado localmente!');
+    }
+    
+    setPendingChanges(true);
+    setIsModalOpen(false);
   };
 
   const columns = [
@@ -369,7 +284,7 @@ function ProductsTab({
       render: (_: any, record: any) => (
         <Space>
           <Button size="small" icon={<EditOutlined />} onClick={() => openModal(record)} />
-          <Popconfirm title="Excluir este produto?" onConfirm={() => handleDelete(String(record.id))}>
+          <Popconfirm title="Excluir este produto?" onConfirm={() => handleDelete(record.id)}>
             <Button size="small" danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
@@ -377,40 +292,20 @@ function ProductsTab({
     },
   ];
 
-  // Category options for Select
   const categoryOptions = categories.map(c => ({ label: c.name, value: c.name }));
 
   return (
     <>
       <div className="flex justify-between items-center mb-4">
-        <span className="text-gray-500 text-sm">{products.filter(p => p.nome).length} produtos cadastrados</span>
+        <span className="text-gray-500 text-sm">{products.filter(p => p.nome).length} produtos em memória</span>
         <div className="flex gap-2">
-          <Tooltip
-            title={cooldown > 0 ? `Próxima atualização disponível em ${formatCooldown(cooldown)}` : 'Dispara o rebuild e deploy do site'}
-          >
-            <Button
-              icon={<CloudSyncOutlined />}
-              loading={deploying}
-              disabled={cooldown > 0}
-              onClick={triggerSiteUpdate}
-              style={cooldown > 0
-                ? { borderColor: '#d9d9d9', color: '#999' }
-                : { borderColor: '#127184', color: '#127184' }
-              }
-            >
-              {cooldown > 0
-                ? `Aguarde ${formatCooldown(cooldown)}`
-                : 'Atualizar Produtos no Site'
-              }
-            </Button>
-          </Tooltip>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => openModal()} style={{ background: '#127184' }}>
             Novo Produto
           </Button>
         </div>
       </div>
 
-      <Table columns={columns} dataSource={products.filter(p => p.nome)} rowKey="id" loading={loading} size="middle" scroll={{ x: 600 }} />
+      <Table columns={columns} dataSource={products.filter(p => p.nome)} rowKey="id" size="middle" scroll={{ x: 600 }} />
 
       <Modal
         title={editing ? `Editar: ${editing.nome}` : 'Novo Produto'}
@@ -507,12 +402,12 @@ function ProductsTab({
             className="mb-6"
             style={{ borderColor: '#127184', color: '#127184' }}
           >
-            Escolher da Galeria
+            Escolher da Galeria (GitHub)
           </Button>
 
           {/* ── Drawer de Galeria ── */}
           <Drawer
-            title="Galeria de Imagens"
+            title="Galeria de Imagens (Servidor)"
             open={galleryOpen}
             onClose={() => setGalleryOpen(false)}
             width={520}
@@ -533,7 +428,7 @@ function ProductsTab({
             {galleryLoading ? (
               <div className="flex justify-center py-12"><Spin size="large" /></div>
             ) : galleryImages.length === 0 ? (
-              <Empty description="Nenhuma imagem encontrada no servidor." />
+              <Empty description="Nenhuma imagem encontrada no repositório." />
             ) : (
               <div className="grid grid-cols-3 gap-3">
                 {galleryImages.map((img) => (
@@ -567,7 +462,7 @@ function ProductsTab({
           <div className="flex justify-end gap-2 mt-2">
             <Button onClick={() => setIsModalOpen(false)}>Cancelar</Button>
             <Button type="primary" htmlType="submit" style={{ background: '#127184' }}>
-              Salvar Produto
+              Salvar na Memória
             </Button>
           </div>
         </Form>
@@ -579,20 +474,68 @@ function ProductsTab({
 // ─── Main Admin Page ────────────────────────────────────────────────────────
 export default function AdminPage() {
   const [credentials, setCredentials] = useState<{ user: string; pass: string } | null>(null);
+  
+  // Estado global da aplicação
   const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  
+  // Controle de alterações
+  const [pendingChanges, setPendingChanges] = useState(false);
+  const [pendingImages, setPendingImages] = useState<{name: string, base64: string}[]>([]);
+  const [publishing, setPublishing] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  const authHeaders = credentials
-    ? { 'X-Admin-User': credentials.user, 'X-Admin-Pass': credentials.pass }
-    : {};
-
-  // Load categories once authenticated (used by Products tab Select)
+  // Load initial data
   useEffect(() => {
     if (!credentials) return;
-    fetch('/api/categories.json', { cache: 'no-store' })
-      .then(r => r.json())
-      .then(setCategories)
-      .catch(() => {});
+    
+    const loadData = async () => {
+      try {
+        const [catRes, prodRes] = await Promise.all([
+          fetch('/api/categories.json', { cache: 'no-store' }),
+          fetch('/api/products.json', { cache: 'no-store' })
+        ]);
+        
+        if (catRes.ok) setCategories(await catRes.json());
+        if (prodRes.ok) setProducts(await prodRes.json());
+        setDataLoaded(true);
+      } catch (err) {
+        message.error("Erro ao carregar dados iniciais.");
+      }
+    };
+    
+    loadData();
   }, [credentials]);
+
+  const handlePublish = async () => {
+    setPublishing(true);
+    try {
+      const res = await fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user: credentials?.user,
+          pass: credentials?.pass,
+          products,
+          categories,
+          images: pendingImages
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        message.success('✅ ' + data.message + ' O Netlify começou o deploy.');
+        setPendingChanges(false);
+        setPendingImages([]);
+      } else {
+        message.error(`❌ Erro: ${data.error}`);
+      }
+    } catch (e: any) {
+      message.error('❌ Erro crítico: ' + e.message);
+    } finally {
+      setPublishing(false);
+    }
+  };
 
   if (!credentials) {
     return <LoginScreen onLogin={(user, pass) => setCredentials({ user, pass })} />;
@@ -602,14 +545,22 @@ export default function AdminPage() {
     {
       key: 'products',
       label: <span><AppstoreOutlined /> Produtos</span>,
-      children: <ProductsTab authHeaders={authHeaders as Record<string, string>} categories={categories} />,
+      children: (
+        <ProductsTab 
+          products={products} setProducts={setProducts} 
+          categories={categories} 
+          setPendingChanges={setPendingChanges}
+          setPendingImages={setPendingImages}
+        />
+      ),
     },
     {
       key: 'categories',
       label: <span><TagsOutlined /> Categorias</span>,
       children: (
         <CategoriesTab
-          authHeaders={authHeaders as Record<string, string>}
+          categories={categories} setCategories={setCategories}
+          setPendingChanges={setPendingChanges}
         />
       ),
     },
@@ -620,15 +571,41 @@ export default function AdminPage() {
       <div className="bg-white border-b px-8 py-4 flex justify-between items-center">
         <div>
           <Title level={4} className="!mb-0 !text-[#127184]">⚙️ Painel Administrativo</Title>
-          <span className="text-gray-400 text-xs">Locmais — Gerenciamento de Produtos</span>
+          <span className="text-gray-400 text-xs">Modo Rascunho / Git-CMS</span>
         </div>
-        <Button size="small" danger onClick={() => setCredentials(null)}>Sair</Button>
+        
+        <div className="flex items-center gap-4">
+          {pendingChanges && (
+            <Badge dot color="red">
+              <span className="text-red-500 font-medium text-sm">Alterações pendentes</span>
+            </Badge>
+          )}
+          
+          <Tooltip title={pendingChanges ? "Salvar tudo no GitHub e acionar deploy" : "Nenhuma alteração pendente"}>
+            <Button 
+              type={pendingChanges ? "primary" : "default"}
+              icon={<CloudSyncOutlined />} 
+              loading={publishing}
+              onClick={handlePublish}
+              disabled={!pendingChanges && pendingImages.length === 0}
+              style={pendingChanges ? { background: '#127184' } : {}}
+            >
+              Publicar no Site
+            </Button>
+          </Tooltip>
+          
+          <Button size="small" danger onClick={() => setCredentials(null)}>Sair</Button>
+        </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-6">
-        <Card className="shadow-sm rounded-xl">
-          <Tabs defaultActiveKey="products" items={tabItems} size="large" />
-        </Card>
+        {!dataLoaded ? (
+          <div className="flex justify-center mt-20"><Spin size="large" /></div>
+        ) : (
+          <Card className="shadow-sm rounded-xl">
+            <Tabs defaultActiveKey="products" items={tabItems} size="large" />
+          </Card>
+        )}
       </div>
     </div>
   );
