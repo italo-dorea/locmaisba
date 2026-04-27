@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const baseTreeSha = commitData.tree.sha;
 
     // 3. Preparar o novo array da árvore (Tree)
-    const tree = [
+    const tree: any[] = [
       {
         path: 'public/api/products.json',
         mode: '100644',
