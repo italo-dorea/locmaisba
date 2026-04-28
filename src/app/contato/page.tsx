@@ -37,7 +37,7 @@ function ContactContent() {
       formData.append('email', values.email || '');
       formData.append('subject', values.subject || '');
       formData.append('message', values.message || '');
-      
+
       // Anexar arquivo se for Trabalhe Conosco
       if (isTrabalheConosco && values.curriculo && values.curriculo.length > 0) {
         const file = values.curriculo[0].originFileObj;
@@ -89,7 +89,7 @@ function ContactContent() {
           {isTrabalheConosco ? 'Trabalhe Conosco' : 'Fale Conosco'}
         </Title>
         <Paragraph className="text-lg text-gray-500 max-w-2xl mx-auto">
-          {isTrabalheConosco 
+          {isTrabalheConosco
             ? 'Faça parte da nossa equipe! Preencha os dados abaixo e anexe seu currículo.'
             : 'Precisa de um orçamento especial, tem dúvidas técnicas ou quer trabalhar conosco? Envie sua mensagem e responderemos o mais rápido possível.'}
         </Paragraph>
@@ -99,7 +99,7 @@ function ContactContent() {
         <Col xs={24} md={10}>
           <div className="bg-locmaisTeal rounded-xl p-8 text-white h-full shadow-lg">
             <Title level={3} className="!text-white !mb-8">Informações de Contato</Title>
-            
+
             <div className="flex items-start mb-8">
               <EnvironmentOutlined className="text-2xl mr-4 text-locmaisYellow mt-1" />
               <div>
@@ -108,8 +108,8 @@ function ContactContent() {
                   <Text className="text-locmaisYellow font-semibold block">Sede (Bahia)</Text>
                   <Text className="text-gray-300">
                     <a href="https://maps.google.com/?q=Av.+Ayrton+Senna,+831+-+Petrópolis,+Dias+d'Ávila+-+BA,+42850-000" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors">
-                      Av. Ayrton Senna, n° 831, SL 01<br/>
-                      Petrópolis, Dias d'Ávila/BA<br/>
+                      Av. Ayrton Senna, n° 831, SL 01<br />
+                      Petrópolis, Dias d'Ávila/BA<br />
                       CEP: 42.850-000
                     </a>
                   </Text>
@@ -131,7 +131,7 @@ function ContactContent() {
               <MailOutlined className="text-2xl mr-4 text-locmaisYellow mt-1" />
               <div>
                 <Text className="text-gray-200 block text-lg font-bold mb-1">E-mail</Text>
-                <Text className="text-gray-300 block">comercial@locmais.com.br</Text>
+                <Text className="text-gray-300 block">comercial@locmaisba.com.br</Text>
               </div>
             </div>
           </div>
@@ -140,26 +140,26 @@ function ContactContent() {
         <Col xs={24} md={14}>
           <Card className="shadow-sm border-gray-200" bodyStyle={{ padding: '32px' }}>
             <Title level={3} className="!text-gray-800 !mb-6">Envie sua Mensagem</Title>
-            <Form 
-              layout="vertical" 
+            <Form
+              layout="vertical"
               form={form}
               onFinish={onFinish}
               requiredMark={false}
             >
               <Row gutter={16}>
                 <Col xs={24} sm={12}>
-                  <Form.Item 
-                    name="name" 
-                    label="Nome Completo" 
+                  <Form.Item
+                    name="name"
+                    label="Nome Completo"
                     rules={[{ required: true, message: 'Por favor, insira seu nome.' }]}
                   >
                     <Input size="large" placeholder="Seu nome" />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12}>
-                  <Form.Item 
-                    name="phone" 
-                    label="Telefone / WhatsApp" 
+                  <Form.Item
+                    name="phone"
+                    label="Telefone / WhatsApp"
                     rules={[{ required: true, message: 'Por favor, insira seu telefone.' }]}
                   >
                     <Input size="large" placeholder="(00) 00000-0000" />
@@ -167,9 +167,9 @@ function ContactContent() {
                 </Col>
               </Row>
 
-              <Form.Item 
-                name="email" 
-                label="E-mail" 
+              <Form.Item
+                name="email"
+                label="E-mail"
                 rules={[
                   { required: true, message: 'Por favor, insira seu e-mail.' },
                   { type: 'email', message: 'Insira um e-mail válido.' }
@@ -178,9 +178,9 @@ function ContactContent() {
                 <Input size="large" placeholder="seu.email@empresa.com.br" />
               </Form.Item>
 
-              <Form.Item 
-                name="subject" 
-                label="Assunto" 
+              <Form.Item
+                name="subject"
+                label="Assunto"
                 rules={[{ required: true, message: 'Qual o assunto da mensagem?' }]}
               >
                 <Input size="large" placeholder="Ex: Solicitação de Orçamento - Geradores" readOnly={isTrabalheConosco} disabled={isTrabalheConosco} />
@@ -194,9 +194,9 @@ function ContactContent() {
                   getValueFromEvent={normFile}
                   rules={[{ required: true, message: 'Por favor, anexe o seu currículo.' }]}
                 >
-                  <Upload 
-                    name="curriculo" 
-                    beforeUpload={() => false} 
+                  <Upload
+                    name="curriculo"
+                    beforeUpload={() => false}
                     maxCount={1}
                     accept=".pdf,.doc,.docx"
                   >
@@ -205,19 +205,19 @@ function ContactContent() {
                 </Form.Item>
               )}
 
-              <Form.Item 
-                name="message" 
-                label={isTrabalheConosco ? "Apresentação / Resumo Profissional" : "Mensagem"} 
+              <Form.Item
+                name="message"
+                label={isTrabalheConosco ? "Apresentação / Resumo Profissional" : "Mensagem"}
                 rules={[{ required: true, message: 'Por favor, escreva sua mensagem.' }]}
               >
                 <TextArea rows={6} placeholder={isTrabalheConosco ? "Fale um pouco sobre você..." : "Detalhe sua necessidade..."} />
               </Form.Item>
 
               <Form.Item className="mb-0 text-right">
-                <Button 
-                  type="primary" 
-                  htmlType="submit" 
-                  size="large" 
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  size="large"
                   icon={<SendOutlined />}
                   className="bg-locmaisYellow hover:!bg-[#e5a50c] border-none font-bold text-white px-8"
                 >
@@ -230,11 +230,11 @@ function ContactContent() {
       </Row>
 
       {/* Formulário oculto para o Netlify detectar os campos no build */}
-      <form 
-        name="contato" 
-        data-netlify="true" 
-        netlify-honeypot="bot-field" 
-        hidden 
+      <form
+        name="contato"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        hidden
         style={{ display: 'none' }}
       >
         <input type="text" name="name" />
