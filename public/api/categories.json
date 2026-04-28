@@ -1,62 +1,62 @@
 [
-    {
-        "id": "bombas",
-        "name": "Bombas"
-    },
-    {
-        "id": "compressores",
-        "name": "Compressores"
-    },
-    {
-        "id": "elevacao-de-carga",
-        "name": "Elevação de Carga"
-    },
-    {
-        "id": "equipamentos-eletricos",
-        "name": "Equipamentos Elétricos"
-    },
-    {
-        "id": "equipamentos-pneumaticos",
-        "name": "Equipamentos Pneumáticos"
-    },
-    {
-        "id": "equipamentos-de-corte",
-        "name": "Equipamentos de Corte"
-    },
-    {
-        "id": "equipamentos-de-medicao",
-        "name": "Equipamentos de Medição"
-    },
-    {
-        "id": "equipamentos-de-solda",
-        "name": "Equipamentos de Solda"
-    },
-    {
-        "id": "escoramento-metalico",
-        "name": "Escoramento Metálico"
-    },
-    {
-        "id": "ferramentas-manuais",
-        "name": "Ferramentas Manuais"
-    },
-    {
-        "id": "furadeiras",
-        "name": "Furadeiras"
-    },
-    {
-        "id": "geradores-e-motores",
-        "name": "Geradores e Motores"
-    },
-    {
-        "id": "movimentacao-terra",
-        "name": "Movimentação Terra"
-    },
-    {
-        "id": "maquinas-pesadas",
-        "name": "Máquinas Pesadas"
-    },
-    {
-        "id": "veiculos",
-        "name": "Veículos"
-    }
+  {
+    "id": "bombas",
+    "name": "Bombas"
+  },
+  {
+    "id": "compressores",
+    "name": "Compressores"
+  },
+  {
+    "id": "elevacao-de-carga",
+    "name": "Elevação de Carga"
+  },
+  {
+    "id": "equipamentos-eletricos",
+    "name": "Equipamentos Elétricos"
+  },
+  {
+    "id": "equipamentos-pneumaticos",
+    "name": "Equipamentos Pneumáticos"
+  },
+  {
+    "id": "equipamentos-de-corte",
+    "name": "Equipamentos de Corte"
+  },
+  {
+    "id": "equipamentos-de-medicao",
+    "name": "Equipamentos de Medição"
+  },
+  {
+    "id": "equipamentos-de-solda",
+    "name": "Equipamentos de Solda"
+  },
+  {
+    "id": "escoramento-metalico",
+    "name": "Escoramento Metálico"
+  },
+  {
+    "id": "ferramentas-manuais",
+    "name": "Ferramentas Manuais"
+  },
+  {
+    "id": "furadeiras",
+    "name": "Furadeiras"
+  },
+  {
+    "id": "geradores-e-motores",
+    "name": "Geradores e Motores"
+  },
+  {
+    "id": "movimentacao-terra",
+    "name": "Movimentação Terra"
+  },
+  {
+    "id": "maquinas-pesadas",
+    "name": "Máquinas Pesadas"
+  },
+  {
+    "id": "veiculos",
+    "name": "Veículos"
+  }
 ]

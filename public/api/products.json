@@ -1,18 +1,18 @@
 [
   {
-    "id": 1,
-    "nome": "Argamassadeira MC 45 CSM",
+    "nome": "Argamassadeira MC 45 CSM.",
+    "Categoria": "Equipamentos Elétricos",
     "subdescricao": "Ideal para obras que exigem agilidade e padronização no preparo.",
-    "descricao": "Mistura eficiente de argamassa com alta produtividade.",
+    "tipo_de_negocio": "venda e locacao",
+    "condicao": "usado",
     "preco": "",
     "Observacao_preco": "",
-    "informacoes_tecnicas": "Modelo: MC 45, Produção: 45L/min, Capacidade da Cuba: 200Kg, Motor Principal: 2CV - IV polos, Tensão/Frequência: 220V OU 380V Trifásico / 60 HZ, Potência da Bomba D'água: 0,33CV, Peso: 138 KG - 160 Kg, Dimensões: (CXLXA): ~1670 X 610 X 1125 MM",
     "observacoes_gerais": "",
-    "Categoria": "Equipamentos Elétricos",
-    "condicao": "usado",
-    "tipo_de_negocio": "venda e locacao",
+    "descricao": "Mistura eficiente de argamassa com alta produtividade.",
+    "informacoes_tecnicas": "Modelo: MC 45, Produção: 45L/min, Capacidade da Cuba: 200Kg, Motor Principal: 2CV - IV polos, Tensão/Frequência: 220V OU 380V Trifásico / 60 HZ, Potência da Bomba D'água: 0,33CV, Peso: 138 KG - 160 Kg, Dimensões: (CXLXA): ~1670 X 610 X 1125 MM",
+    "seo_keywords": "Argamassa, Concretagem, Assentamento de Pisos, Salvador, Lauro de Freitas, Dias D'Ávila",
     "imagem": "/imagens/produtos/prod_69e22eeb720a0.jpg",
-    "seo_keywords": "Argamassa, Concretagem, Assentamento de Pisos, Salvador, Lauro de Freitas, Dias D'Ávila"
+    "id": 1
   },
   {
     "id": 3,
