@@ -28,22 +28,50 @@ function ContactContent() {
     }
   }, [searchParams, form]);
 
-  const onFinish = (values: any) => {
-    console.log('Form values:', values);
-    
-    // Se isTrabalheConosco for true, values.curriculo conterá o arquivo
-    if (isTrabalheConosco && values.curriculo) {
-      console.log('Arquivo Anexado:', values.curriculo.fileList[0]?.originFileObj);
-    }
+  const onFinish = async (values: any) => {
+    try {
+      const formData = new FormData();
+      formData.append('form-name', 'contato');
+      formData.append('name', values.name || '');
+      formData.append('phone', values.phone || '');
+      formData.append('email', values.email || '');
+      formData.append('subject', values.subject || '');
+      formData.append('message', values.message || '');
+      
+      // Anexar arquivo se for Trabalhe Conosco
+      if (isTrabalheConosco && values.curriculo && values.curriculo.length > 0) {
+        const file = values.curriculo[0].originFileObj;
+        if (file) {
+          formData.append('curriculo', file);
+        }
+      }
 
-    notification.success({
-      message: 'Mensagem Enviada!',
-      description: 'Recebemos seu contato. Nossa equipe retornará em breve.',
-      placement: 'bottomRight',
-    });
-    form.resetFields();
-    if (isTrabalheConosco) {
-      form.setFieldsValue({ subject: 'Trabalhe Conosco / Envio de Currículo' });
+      const response = await fetch('/', {
+        method: 'POST',
+        body: formData,
+        // O Netlify reconhece o body como multipart/form-data automaticamente quando usamos FormData nativo
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao enviar formulário');
+      }
+
+      notification.success({
+        message: 'Mensagem Enviada!',
+        description: 'Recebemos seu contato. Nossa equipe retornará em breve.',
+        placement: 'bottomRight',
+      });
+      form.resetFields();
+      if (isTrabalheConosco) {
+        form.setFieldsValue({ subject: 'Trabalhe Conosco / Envio de Currículo' });
+      }
+    } catch (error) {
+      console.error(error);
+      notification.error({
+        message: 'Erro no Envio',
+        description: 'Ocorreu um erro ao enviar a mensagem. Tente novamente.',
+        placement: 'bottomRight',
+      });
     }
   };
 
@@ -200,6 +228,22 @@ function ContactContent() {
           </Card>
         </Col>
       </Row>
+
+      {/* Formulário oculto para o Netlify detectar os campos no build */}
+      <form 
+        name="contato" 
+        data-netlify="true" 
+        netlify-honeypot="bot-field" 
+        hidden 
+        style={{ display: 'none' }}
+      >
+        <input type="text" name="name" />
+        <input type="text" name="phone" />
+        <input type="email" name="email" />
+        <input type="text" name="subject" />
+        <textarea name="message"></textarea>
+        <input type="file" name="curriculo" />
+      </form>
     </div>
   );
 }
