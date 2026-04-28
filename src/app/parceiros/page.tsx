@@ -46,6 +46,7 @@ function ParceirosContent() {
         </Col>
       </Row>
 
+      {/* 
       <div className="mb-16">
         <Title level={3} className="text-center !text-gray-800 !mb-8">Empresas que confiam na Loc Mais</Title>
         <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 max-w-5xl mx-auto">
@@ -60,6 +61,7 @@ function ParceirosContent() {
           </Carousel>
         </div>
       </div>
+      */}
     </div>
   );
 
@@ -80,6 +82,7 @@ function ParceirosContent() {
         </Col>
       </Row>
 
+      {/*
       <div className="mb-16">
         <Title level={3} className="text-center !text-gray-800 !mb-8">Grandes marcas lado a lado conosco</Title>
         <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 max-w-5xl mx-auto">
@@ -94,6 +97,7 @@ function ParceirosContent() {
           </Carousel>
         </div>
       </div>
+      */}
     </div>
   );
 
